@@ -4,9 +4,9 @@
   "description": "movieBot",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js --exec babel-node",
+    "start": "nodemon ./src/index.js --exec babel-node",
     "build": "babel src -d dist --presets es2015,stage-2",
-    "serve": "nodemon dist/index.js"
+    "serve": "nodemon ./dist/index.js"
   },
   "author": "team10",
   "license": "ISC",
