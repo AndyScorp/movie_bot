@@ -2,8 +2,6 @@
 var request = require('request');
 var cheerio = require('cheerio');
 
-var lubavaUrl = 'http://cherkassy.multiplex.ua/Poster.aspx?id=16';
-
 
 module.exports.getMovies = function (url, element) {
   return new Promise(function (resolve, reject) {

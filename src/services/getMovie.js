@@ -11,6 +11,8 @@ module.exports.getMovie = function (id) {
             if (!error && response.statusCode == 200) {
                 var movie = {};
                 var $ = cheerio.load(html);
+                movie.schedulePlaza = $('#ctl00_cphMain_divEvents > table > tbody > tr.bg1_1').text().split('а"').join('а"  ');
+                movie.scheduleLubava = $('#ctl00_cphMain_divEvents > table > tbody > tr.bg1_2').text().split('а"').join('а"  ');
                 movie.title = $('.blok > div > h1').text();
                 movie.duration = $('#ctl00_cphMain_lblLength').text();
                 movie.type = $('#ctl00_cphMain_lblGenres').text();
