@@ -1,4 +1,4 @@
-token = require('token_telegram.json')["token"];
+const token = require('/home/rrlero/WebstormProjects/ChanBot/token_telegram.json').token;
 
 module.exports = {
     telegram: {
