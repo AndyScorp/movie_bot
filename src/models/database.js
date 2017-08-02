@@ -4,9 +4,9 @@ var config = {
     database: 'chat_bot',
     password: '7M7T9nHH'
 };
-var connectionString = process.env.DATABASE_URL || 'postgresql://chat_bot:7M7T9nHH@localhost/chat_bot';
+var connectionString = process.env.DATABASE_URL || 'postgresql:///chat_bot';
 pg = require('pg');
-var pool = new pg.Pool(config);
+var pool = new pg.Pool(connectionString);
 
 
 var createTableText = 'CREATE TABLE IF NOT EXISTS movies (id SERIAL PRIMARY KEY, data JSONB);';
