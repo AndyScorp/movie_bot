@@ -165,7 +165,8 @@ bot.onText(/\/help/, function(msg) {
     bot.sendMessage(msg.chat.id, "/start - Movies from our city\n"
         + "/genre - 3 different movies filtered by genre\n"
         + "/year - 3 movies from year you wanted to watch\n"
-        + "/filter_g_y - 3 movies by filter genre + year"
+        + "/filter_g_y - 3 movies by filter genre + year\n"
+        + "/get_db - list from db"
     );
 });
 
