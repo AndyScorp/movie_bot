@@ -1,5 +1,6 @@
 var ajax = require('./ajaxUtils');
 var genres = require('../lib/genres-id.json');
+var add_db = require('../models/database');
 
 
 module.exports.getMovieByGenre = function (url, replace) {
@@ -9,10 +10,10 @@ module.exports.getMovieByGenre = function (url, replace) {
             if (request) {
                 var filmsArray = [];
                 var results = request.results;
-                console.log(results[0]);
                 for (var i=0; i<3 && i<results.length; i++) {
                     var entry = getRandomEntry(results);
                     filmsArray.push(entry);
+                    add_db.create_db(JSON.stringify(entry))
                 }
                 return resolve(filmsArray);
             } else {
