@@ -33,3 +33,19 @@ module.exports.create_db = function (json) {
     });
 };
 
+module.exports.get_db = function () {
+    return new Promise (function (resolve, reject) {
+        pool.connect(function (err, client, release) {
+            if (err) {
+                console.error('connection error', err.stack)
+            } else {
+                client.query("SELECT * FROM movies ORDER BY id ASC;", function (err,res) {
+                    var movieArray;
+                    movieArray = res.rows;
+                    return resolve(movieArray)
+                })
+            }
+    });
+    });
+};
+
