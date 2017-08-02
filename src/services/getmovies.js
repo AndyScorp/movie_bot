@@ -16,6 +16,7 @@ module.exports.getMovies = function (url, element) {
                   var mov = (a.text().trim().replace(/\t/g, '').replace(/\n\n/g, '\n') + '\n' + index).split('\n');
                   array.push(mov)
               });
+              console.log(array);
               return resolve(array)
           } else {
               return reject

@@ -10,6 +10,8 @@ var ListMovieNames = require('./services/listMoviesNames');
 var lubavaUrl = 'http://cherkassy.multiplex.ua/Poster.aspx?id=16';
 var plazaUrl = 'http://cherkassy.multiplex.ua/Poster.aspx?id=10';
 
+var genres = require('./lib/genres-id.json');
+
 
 bot.on('message', function (msg) {
     var movieString = [];
@@ -143,7 +145,7 @@ bot.on('message', function (msg) {
                     bot.sendContact(
                         msg.from.id,
                         '+380472724313',
-                        "Lubava")
+                        "Plaza")
                 }
             });
         });
@@ -160,5 +162,102 @@ bot.onText(/\/start/, function(msg) {
 });
 
 bot.onText(/\/help/, function(msg) {
-    bot.sendMessage(msg.chat.id, "All you need is to type /start - then everything will be clear to understand");
+    bot.sendMessage(msg.chat.id, "/start - Movies from our city\n"
+        + "/genre - 3 different movies filtered by genre\n"
+        + "/year - 3 movies from year you wanted to watch\n"
+        + "/filter_g_y - 3 movies by filter genre + year"
+    );
 });
+
+
+
+bot.onText(/\/year/, function (msg) {
+    bot.sendMessage(msg.chat.id, "input Year which interesting for you (example: 2017)", {
+    }).then(function (value) {
+        bot.once('message', function (msg) {
+            var chat_id = msg.chat.id;
+            var get_movie_by_genre = require('./services/get-movie-by-genre');
+            var url = 'https://api.themoviedb.org/3/discover/movie?api_key=15693fda909384f535d90fd7b33e3b4f&year={name}';
+            var movie_list_by_genre = get_movie_by_genre.getMovieByGenre(url, msg.text);
+            movie_list_by_genre.then(function (resolve) {
+                for (var i=0; i<3; i++) {
+                        bot.sendMessage(
+                            chat_id,
+                            '*' + resolve[i].original_title + '*' + '\n'
+                            + resolve[i].overview + '\n'
+                            + '_' + resolve[i].release_date + '_' + '\n'
+                            + '\n' + resolve[i].popularity + '\n\n'
+                            + 'https://www.themoviedb.org/movie/'+ resolve[i].id,
+                            {parse_mode : "Markdown"}
+                        );
+                }
+            });
+        })
+    })
+});
+
+bot.onText(/\/genre/, function (msg) {
+
+    bot.sendMessage(msg.chat.id, "input Genre of the movie you want to watch", {
+        "reply_markup": {
+            "inline_keyboard": ListMovieNames.listMovienames(3, genres.genres)
+        }
+    }).then(function (value) {
+        bot.once('callback_query', function (msg) {
+            var chat_id = msg.message.chat.id;
+            var get_movie_by_genre = require('./services/get-movie-by-genre');
+            var url = 'https://api.themoviedb.org/3/discover/movie?api_key=15693fda909384f535d90fd7b33e3b4f&with_genres={name}';
+            var movie_list_by_genre = get_movie_by_genre.getMovieByGenre(url, msg.data);
+            movie_list_by_genre.then(function (resolve) {
+                for (var i=0; i<3; i++) {
+                    bot.sendMessage(
+                        chat_id,
+                        '*' + resolve[i].original_title + '*' + '\n'
+                        + resolve[i].overview + '\n'
+                        + '_' + resolve[i].release_date + '_' + '\n'
+                        + '\n' + resolve[i].popularity + '\n\n'
+                        + 'https://www.themoviedb.org/movie/'+ resolve[i].id,
+                        {parse_mode : "Markdown"}
+                    );
+                }
+            });
+        })
+    })
+});
+
+bot.onText(/\/filter_g_y/, function (msg) {
+
+    bot.sendMessage(msg.chat.id, "input Genre and Year in such way: comedy+2017", {
+
+    }).then(function (value) {
+        bot.once('message', function (msg) {
+            var array = msg.text.split('+');
+            var chat_id = msg.chat.id;
+            var get_movie_by_genre = require('./services/get-movie-by-genre');
+            var genre_id = require('./services/get_genre_id').getGenreId(array[0].toLowerCase());
+            var url = 'https://api.themoviedb.org/3/discover/movie?api_key=15693fda909384f535d90fd7b33e3b4f&year={name}&with_genres='+genre_id;
+            var movie_list_by_genre = get_movie_by_genre.getMovieByGenre(url, msg.data);
+            movie_list_by_genre.then(function (resolve) {
+                for (var i=0; i<3; i++) {
+                    bot.sendMessage(
+                        chat_id,
+                        '*' + resolve[i].original_title + '*' + '\n'
+                        + resolve[i].overview + '\n'
+                        + '_' + resolve[i].release_date + '_' + '\n'
+                        + '\n' + resolve[i].popularity + '\n\n'
+                        + 'https://www.themoviedb.org/movie/'+ resolve[i].id,
+                        {parse_mode : "Markdown"}
+                    );
+                }
+            });
+        })
+    })
+});
+bot.onText(/\/find_by_title_imdb/, function (msg) {
+    bot.sendMessage(msg.chat.id, "input Genre of the movie you want to watch", {
+        "reply_markup": {
+            "inline_keyboard": [[{text:'Action', callback_data: 'Action'}], [{text:'Звонок в Плазу', callback_data: 'plaza'}]]
+        }
+    })
+});
+

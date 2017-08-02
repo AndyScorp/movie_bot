@@ -1,0 +1,80 @@
+{
+  "genres": [
+    {
+      "callback_data": "28",
+      "text": "Action"
+    },
+    {
+      "callback_data": "12",
+      "text": "Adventure"
+    },
+    {
+      "callback_data": "16",
+      "text": "Animation"
+    },
+    {
+      "callback_data": "35",
+      "text": "Comedy"
+    },
+    {
+      "callback_data": "80",
+      "text": "Crime"
+    },
+    {
+      "callback_data": "99",
+      "text": "Documentary"
+    },
+    {
+      "callback_data": "18",
+      "text": "Drama"
+    },
+    {
+      "callback_data": "10751",
+      "text": "Family"
+    },
+    {
+      "callback_data": "14",
+      "text": "Fantasy"
+    },
+    {
+      "callback_data": "36",
+      "text": "History"
+    },
+    {
+      "callback_data": "27",
+      "text": "Horror"
+    },
+    {
+      "callback_data": "10402",
+      "text": "Music"
+    },
+    {
+      "callback_data": "9648",
+      "text": "Mystery"
+    },
+    {
+      "callback_data": "10749",
+      "text": "Romance"
+    },
+    {
+      "callback_data": "878",
+      "text": "Science Fiction"
+    },
+    {
+      "callback_data": "10770",
+      "text": "TV Movie"
+    },
+    {
+      "callback_data": "53",
+      "text": "Thriller"
+    },
+    {
+      "callback_data": "10752",
+      "text": "War"
+    },
+    {
+      "callback_data": "37",
+      "text": "Western"
+    }
+  ]
+}

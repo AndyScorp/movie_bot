@@ -1,6 +1,7 @@
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 var ajaxUtils = {};
+var object;
 
 function getRequestObject() {
     return (new XMLHttpRequest())
