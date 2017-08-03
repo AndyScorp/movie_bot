@@ -4,7 +4,7 @@ var add_db = require('../models/database');
 
 module.exports.getMovieByGenre = function (url, replace) {
     return new Promise(function (resolve, reject) {
-        ajax.sendGetRequest(url.replace('{name}', replace) + '&page='+getRandomPage(100), handler, true);
+        ajax.sendGetRequest(url.replace('{name}', replace) + '&page='+getRandomPage(50), handler, true);
         function handler(request) {
             if (request) {
                 var filmsArray = [];

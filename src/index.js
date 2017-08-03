@@ -13,6 +13,17 @@ var plazaUrl = 'http://cherkassy.multiplex.ua/Poster.aspx?id=10';
 var genres = require('./lib/genres-id.json');
 var urls = require('./lib/url-for-dbbase');
 
+var express = require('express');
+var app = express();
+
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+
+app.get('/', function (req, res) {
+    res.render('pages/index');
+});
+
+
 
 bot.on('message', function (msg) {
     var movieString = [];
@@ -280,4 +291,22 @@ bot.onText(/\/get_db/, function (msg) {
         });
         bot.sendMessage(msg.chat.id, newString);
     });
+});
+
+app.get('/history', function(req, res) {
+
+    var list = require('./models/database');
+    list.get_db().then(function (resolve) {
+        var lastTen = resolve.slice(resolve.length-11);
+        res.render('pages/history', {
+            lastTen: lastTen
+        });
+    });
+});
+
+
+
+
+app.listen(8080, function () {
+    console.log('Our server is live on port 8080')
 });
