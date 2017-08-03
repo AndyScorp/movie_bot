@@ -18,6 +18,7 @@ var app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
+app.set('port', (process.env.PORT || 8080));
 
 app.get('/', function (req, res) {
     res.render('pages/index');
@@ -307,6 +308,6 @@ app.get('/history', function(req, res) {
 
 
 
-app.listen(8080, function () {
-    console.log('Our server is live on port 8080')
+app.listen(app.get('port'), function() {
+    console.log('Node app is running on port', app.get('port'));
 });
