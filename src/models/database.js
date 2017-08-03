@@ -33,6 +33,7 @@ module.exports.create_db = function (json) {
             // client.query(createTableText, function (err,res) {
             // });
             client.query("INSERT INTO movies(data) values($1)", [json], function (err,res) {
+                client.end();
                 pool.end();
             });
         }
@@ -50,6 +51,7 @@ module.exports.get_db = function () {
                 console.error('connection error', err.stack)
             } else {
                 client.query("SELECT * FROM movies ORDER BY id;", function (err,res) {
+                    client.end();
                     pool.end();
                     return resolve(res.rows)
                 })
