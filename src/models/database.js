@@ -39,10 +39,9 @@ module.exports.get_db = function () {
             if (err) {
                 console.error('connection error', err.stack)
             } else {
-                client.query("SELECT * FROM movies ORDER BY id ASC;", function (err,res) {
-                    var movieArray;
-                    movieArray = res.rows;
-                    return resolve(movieArray)
+                client.query("SELECT * FROM movies ORDER BY id;", function (err,res) {
+                    // console.log(res.rows);
+                    return resolve(res.rows)
                 })
             }
     });

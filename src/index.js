@@ -265,8 +265,8 @@ bot.onText(/\/find_by_title_imdb/, function (msg) {
 bot.onText(/\/get_db/, function (msg) {
     var list = require('./models/database');
     list.get_db().then(function (resolve) {
-        resolve.forEach(function (elem) {
-            bot.sendMessage(msg.chat.id, elem.id + elem.data.title)
-        });
+        for (var i=0; i<10; i++) {
+            bot.sendMessage(msg.chat.id, resolve[resolve.length-i-1].id + ' ' + resolve[resolve.length-i-1].data.title)
+        }
     });
 });
