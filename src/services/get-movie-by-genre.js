@@ -1,5 +1,4 @@
 var ajax = require('./ajaxUtils');
-var genres = require('../lib/genres-id.json');
 var add_db = require('../models/database');
 
 
@@ -23,15 +22,17 @@ module.exports.getMovieByGenre = function (url, replace) {
     });
 };
 
-
+// Method to call Object like array
 function toArray(obj) {
     return [].slice.call(obj)
 }
 
+// Method to get one random Array item
 function getRandomEntry(array) {
     return array[Math.round(Math.random() * (array.length - 1))];
 }
 
+// Method to get one random number
 function getRandomPage(number) {
     return Math.round(Math.random() * (number - 1))
 }

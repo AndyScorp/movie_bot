@@ -11,6 +11,7 @@ var lubavaUrl = 'http://cherkassy.multiplex.ua/Poster.aspx?id=16';
 var plazaUrl = 'http://cherkassy.multiplex.ua/Poster.aspx?id=10';
 
 var genres = require('./lib/genres-id.json');
+var urls = require('./lib/url-for-dbbase');
 
 
 bot.on('message', function (msg) {
@@ -26,6 +27,7 @@ bot.on('message', function (msg) {
                     callback_data: item[2]
                 });
             });
+
             var newArray = ListMovieNames.listMovienames(2, linkString);
 
             bot.sendMessage(chatId, '<b>' + msg.text.toUpperCase() + '</b>' + '\n\n' + movieString.join('\n\n'), {
@@ -34,7 +36,7 @@ bot.on('message', function (msg) {
                     // "keyboard": newArray,
                     "inline_keyboard": newArray
                 }
-            }).then(function(ans) {
+            }).then(function() {
                 bot.once('callback_query', function(msg) {
                     if (msg.data) {
                         for (var i=0; i < resolve.length; i++) {
@@ -42,18 +44,16 @@ bot.on('message', function (msg) {
                                 movie.getMovie(resolve[i][2]).then(function(mov) {
                                     bot.sendPhoto(
                                         msg.from.id,
-                                        mov.pathImage,
-                                        {
+                                        mov.pathImage, {
                                             caption : mov.title + '\n' + mov.type + '\n' + mov.duration,
                                             "reply_markup": {
                                                 "inline_keyboard": [[{text:'Описание', callback_data: 'Description'}]]
                                             }
                                         }
-                                    ).then(function (ans) {
+                                    ).then(function () {
                                         bot.once('callback_query', function (msg) {
                                             if (msg.data==='Description') {
-                                                bot.sendMessage(
-                                                    msg.from.id,
+                                                bot.sendMessage(msg.from.id,
                                                     '*' + mov.title + '*' + '\n'
                                                     + mov.type + '\n'
                                                     + '_' + mov.duration + '_' + '\n'
@@ -90,7 +90,7 @@ bot.on('message', function (msg) {
                 "reply_markup": {
                     "inline_keyboard": newArray
                 }
-            }).then(function(ans) {
+            }).then(function() {
                 bot.once('callback_query', function(msg) {
                     if (msg.data) {
                         for (var i=0; i < resolve.length; i++) {
@@ -98,18 +98,16 @@ bot.on('message', function (msg) {
                                 movie.getMovie(resolve[i][2]).then(function(mov) {
                                     bot.sendPhoto(
                                         msg.from.id,
-                                        mov.pathImage,
-                                        {
+                                        mov.pathImage, {
                                             caption : mov.title + '\n' + mov.type + '\n' + mov.duration,
                                             "reply_markup": {
                                                 "inline_keyboard": [[{text:'Описание', callback_data: 'Description'}]]
                                             }
                                         }
-                                    ).then(function (ans) {
+                                    ).then(function () {
                                         bot.once('callback_query', function (msg) {
                                             if (msg.data==='Description') {
-                                                bot.sendMessage(
-                                                    msg.from.id,
+                                                bot.sendMessage(msg.from.id,
                                                     '*' + mov.title + '*' + '\n'
                                                     + mov.type + '\n'
                                                     + '_' + mov.duration + '_' + '\n'
@@ -134,7 +132,7 @@ bot.on('message', function (msg) {
             "reply_markup": {
                 "inline_keyboard": [[{text:'Звонок в Любаву', callback_data: 'lubava'}, {text:'Звонок в Плазу', callback_data: 'plaza'}]]
             }
-        }).then(function (value) {
+        }).then(function () {
             bot.once('callback_query', function(msg) {
                 if (msg.data==='lubava') {
                     bot.sendContact(
@@ -163,97 +161,106 @@ bot.onText(/\/start/, function(msg) {
 
 bot.onText(/\/help/, function(msg) {
     bot.sendMessage(msg.chat.id, "/start - Movies from our city\n"
-        + "/genre - 3 different movies filtered by genre\n"
-        + "/year - 3 movies from year you wanted to watch\n"
-        + "/filter_g_y - 3 movies by filter genre + year\n"
+        + "/genre - 3 different movies filtered by Genre\n"
+        + "/year - 3 movies from chosen year you wanted to watch\n"
+        + "/filterGY - 3 movies by filter Genre + Year\n"
         + "/get_db - list from db"
     );
 });
 
-
-
+// Command to receive movie filtered by Year
 bot.onText(/\/year/, function (msg) {
-    bot.sendMessage(msg.chat.id, "input Year which interesting for you (example: 2017)", {
-    }).then(function (value) {
+    bot.sendMessage(msg.chat.id, "Input Year which interesting for you (example: 2017)", {
+    }).then(function () {
         bot.once('message', function (msg) {
             var chat_id = msg.chat.id;
             var get_movie_by_genre = require('./services/get-movie-by-genre');
-            var url = 'https://api.themoviedb.org/3/discover/movie?api_key=15693fda909384f535d90fd7b33e3b4f&year={name}';
+            var url = urls.urls.year + '&year={name}';
             var movie_list_by_genre = get_movie_by_genre.getMovieByGenre(url, msg.text);
             movie_list_by_genre.then(function (resolve) {
-                for (var i=0; i<3; i++) {
-                        bot.sendMessage(
-                            chat_id,
-                            '*' + resolve[i].original_title + '*' + '\n'
-                            + resolve[i].overview + '\n'
-                            + '_' + resolve[i].release_date + '_' + '\n'
-                            + '\n' + resolve[i].popularity + '\n\n'
-                            + 'https://www.themoviedb.org/movie/'+ resolve[i].id,
+                if (!resolve.length) {
+                    bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
+                } else {
+                    resolve.forEach(function (elem) {
+                        bot.sendMessage(chat_id,
+                            '*' + elem.original_title + '*' + '\n'
+                            + elem.overview + '\n'
+                            + '_' + elem.release_date + '_' + '\n'
+                            + '\n' + elem.popularity + '\n\n'
+                            + 'https://www.themoviedb.org/movie/'+ elem.id,
                             {parse_mode : "Markdown"}
                         );
+                    });
                 }
             });
         })
     })
 });
 
+// Command to receive movie filtered by genre
 bot.onText(/\/genre/, function (msg) {
-
-    bot.sendMessage(msg.chat.id, "input Genre of the movie you want to watch", {
+    bot.sendMessage(msg.chat.id, "Input Genre of the movie you want to watch", {
         "reply_markup": {
             "inline_keyboard": ListMovieNames.listMovienames(3, genres.genres)
         }
-    }).then(function (value) {
+    }).then(function () {
         bot.once('callback_query', function (msg) {
             var chat_id = msg.message.chat.id;
             var get_movie_by_genre = require('./services/get-movie-by-genre');
-            var url = 'https://api.themoviedb.org/3/discover/movie?api_key=15693fda909384f535d90fd7b33e3b4f&with_genres={name}';
+            var url = urls.urls.genre + '&with_genres={name}';
             var movie_list_by_genre = get_movie_by_genre.getMovieByGenre(url, msg.data);
             movie_list_by_genre.then(function (resolve) {
-                for (var i=0; i<3; i++) {
-                    bot.sendMessage(
-                        chat_id,
-                        '*' + resolve[i].original_title + '*' + '\n'
-                        + resolve[i].overview + '\n'
-                        + '_' + resolve[i].release_date + '_' + '\n'
-                        + '\n' + resolve[i].popularity + '\n\n'
-                        + 'https://www.themoviedb.org/movie/'+ resolve[i].id,
-                        {parse_mode : "Markdown"}
-                    );
+                if (!resolve.length) {
+                    bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
+                } else {
+                    resolve.forEach(function (elem) {
+                        bot.sendMessage(chat_id,
+                            '*' + elem.original_title + '*' + '\n'
+                            + elem.overview + '\n'
+                            + '_' + elem.release_date + '_' + '\n'
+                            + '\n' + elem.popularity + '\n\n'
+                            + urls.urls.movieDB + elem.id,
+                            {parse_mode : "Markdown"}
+                        );
+                    });
                 }
             });
         })
     })
 });
 
-bot.onText(/\/filter_g_y/, function (msg) {
-
+// Command to receive movie filtered by year and genre
+bot.onText(/\/filterGY/, function (msg) {
     bot.sendMessage(msg.chat.id, "input Genre and Year in such way: comedy+2017", {
-
-    }).then(function (value) {
+    }).then(function () {
         bot.once('message', function (msg) {
             var array = msg.text.split('+');
             var chat_id = msg.chat.id;
             var get_movie_by_genre = require('./services/get-movie-by-genre');
             var genre_id = require('./services/get_genre_id').getGenreId(array[0].toLowerCase());
-            var url = 'https://api.themoviedb.org/3/discover/movie?api_key=15693fda909384f535d90fd7b33e3b4f&year={name}&with_genres='+genre_id;
-            var movie_list_by_genre = get_movie_by_genre.getMovieByGenre(url, msg.data);
+            var url = urls.urls.filterGY + '&year={name}&with_genres='+genre_id;
+            var movie_list_by_genre = get_movie_by_genre.getMovieByGenre(url, array[1]);
             movie_list_by_genre.then(function (resolve) {
-                for (var i=0; i<3; i++) {
-                    bot.sendMessage(
-                        chat_id,
-                        '*' + resolve[i].original_title + '*' + '\n'
-                        + resolve[i].overview + '\n'
-                        + '_' + resolve[i].release_date + '_' + '\n'
-                        + '\n' + resolve[i].popularity + '\n\n'
-                        + 'https://www.themoviedb.org/movie/'+ resolve[i].id,
-                        {parse_mode : "Markdown"}
-                    );
+                if (!resolve.length) {
+                    bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
+                } else {
+                    resolve.forEach(function (elem) {
+                        bot.sendMessage(chat_id,
+                            '*' + elem.original_title + '*' + '\n'
+                            + elem.overview + '\n'
+                            + '_' + elem.release_date + '_' + '\n'
+                            + '\n' + elem.popularity + '\n\n'
+                            + urls.urls.movieDB + elem.id,
+                            {parse_mode : "Markdown"}
+                        );
+                    });
                 }
             });
         })
     })
 });
+
+// Block for find movie by title !!!!!Need to do!!!!!!!Not Working!!!!!
 bot.onText(/\/find_by_title_imdb/, function (msg) {
     bot.sendMessage(msg.chat.id, "input Genre of the movie you want to watch", {
         "reply_markup": {
@@ -262,11 +269,15 @@ bot.onText(/\/find_by_title_imdb/, function (msg) {
     })
 });
 
+// Command to receive last ten database records
 bot.onText(/\/get_db/, function (msg) {
     var list = require('./models/database');
     list.get_db().then(function (resolve) {
-        for (var i=0; i<10; i++) {
-            bot.sendMessage(msg.chat.id, resolve[resolve.length-i-1].id + ' ' + resolve[resolve.length-i-1].data.title)
-        }
+        var lastTen = resolve.slice(resolve.length-11);
+        var newString = '';
+        lastTen.forEach(function (elem) {
+            newString += elem.id + ' ' + elem.data.title + '\n';
+        });
+        bot.sendMessage(msg.chat.id, newString);
     });
 });
