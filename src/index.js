@@ -1,4 +1,4 @@
-var fs = require('fs');
+
 var libBot = require('./lib/bot');
 var Bot = require('node-telegram-bot-api');
 var bot = new Bot(process.env.TELEGRAM_TOKEN || require('./token_telegram.json').token, {polling: true});
@@ -290,12 +290,11 @@ bot.onText(/\/get_db/, function (msg) {
         lastTen.forEach(function (elem) {
             newString += elem.id + ' ' + elem.data.title + '\n';
         });
-        bot.sendMessage(msg.chat.id, newString);
+        bot.sendMessage(msg.chat.id, newString + '\n' + 'https://movie-lite-bot.herokuapp.com/history');
     });
 });
 
 app.get('/history', function(req, res) {
-
     var list = require('./models/database');
     list.get_db().then(function (resolve) {
         var lastTen = resolve.slice(resolve.length-11);
@@ -304,6 +303,8 @@ app.get('/history', function(req, res) {
         });
     });
 });
+
+
 
 
 var server = app.listen(process.env.PORT, function () {
