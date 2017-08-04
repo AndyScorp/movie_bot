@@ -1,7 +1,7 @@
 var fs = require('fs');
 var libBot = require('./lib/bot');
-
-const bot = new libBot();
+var Bot = require('node-telegram-bot-api');
+var bot = new Bot(require('./token_telegram.json').token, {polling: true});
 
 var movies = require('./services/getmovies');
 var movie = require('./services/getMovie');
@@ -307,10 +307,16 @@ app.get('/history', function(req, res) {
 
 
 
+var server = app.listen(process.env.PORT, function () {
+    var host = server.address().address;
+    var port = server.address().port;
 
-app.listen('/tmp/nginx.socket', function() {
-    if (process.env.DYNO) {
-        console.log('This is on Heroku..!!');
-        fs.openSync('/tmp/app-initialized', 'w');
-    }
+    console.log('Web server started at http://%s:%s', host, port);
 });
+
+// app.listen('/tmp/nginx.socket', function() {
+//     if (process.env.DYNO) {
+//         console.log('This is on Heroku..!!');
+//         fs.openSync('/tmp/app-initialized', 'w');
+//     }
+// });
