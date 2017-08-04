@@ -18,7 +18,7 @@ var app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
-app.set('port', (8080 || 443));
+// app.set('port', (8080 || 443));
 
 app.get('/', function (req, res) {
     res.render('pages/index');
