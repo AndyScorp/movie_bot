@@ -1,6 +1,6 @@
 
 var libBot = require('./lib/bot');
-
+var fs = require('fs');
 const bot = new libBot();
 
 var movies = require('./services/getmovies');
@@ -308,6 +308,10 @@ app.get('/history', function(req, res) {
 
 
 
-app.listen(app.get('port'), function() {
-    console.log('Node app is running on port', app.get('port'));
+app.listen(app.get('/tmp/nginx.socket'), function() {
+    if (process.env.DYNO) {
+        console.log('This is on Heroku..!!');
+        fs.openSync('/tmp/app-initialized', 'w');
+    }
+    console.log('Node server started on' + self.port );
 });
