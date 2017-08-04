@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container">
+
+<header>
+    <% include ../partials/header %>
+</header>
+
+<main>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="jumbotron">
+                <h1 class="text-center">3 Movies by Year: <%= year %></h1>
+            </div>
+
+            <div class="row">
+            <% moviesByYear.forEach(function(movie) { %>
+            <div class="media col-sm-6">
+                <div class="media-left media-top">
+                    <a href="#">
+                        <img class="media-object" src="<%= movie.url %>" alt="img" width="200px">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading"><%= movie.title %></h4>
+                    <p><%= movie.overview %></p>
+                    <p><%= movie.release_date %></p>
+                    <p><%= movie.popularity %></p>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+</body>
+</html>

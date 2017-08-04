@@ -18,6 +18,7 @@ var app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
+app.use(express.static(__dirname + '/views/styles'));
 // app.set('port', (8080 || 443));
 
 app.get('/', function (req, res) {
@@ -199,7 +200,8 @@ bot.onText(/\/year/, function (msg) {
                             + elem.overview + '\n'
                             + '_' + elem.release_date + '_' + '\n'
                             + '\n' + elem.popularity + '\n\n'
-                            + 'https://www.themoviedb.org/movie/'+ elem.id,
+                            + 'https://www.themoviedb.org/movie/'+ elem.id + '\n'
+                            + 'https://movie-lite-bot.herokuapp.com/year/' + msg.text,
                             {parse_mode : "Markdown"}
                         );
                     });
@@ -304,6 +306,31 @@ app.get('/history', function(req, res) {
     });
 });
 
+app.get('/year/:year', function(req, res) {
+    var moviesByYear = [];
+    var get_movie_by_genre = require('./services/get-movie-by-genre');
+    var url = urls.urls.year + '&year={name}';
+    var movie_list_by_genre = get_movie_by_genre.getMovieByGenre(url, req.params.year.trim());
+    movie_list_by_genre.then(function (resolve) {
+        if (!resolve.length) {
+            moviesByYear = [];
+        } else {
+            resolve.forEach(function (elem) {
+                moviesByYear.push({
+                    title: elem.original_title,
+                    overview: elem.overview,
+                    release_date: elem.release_date,
+                    popularity: elem.popularity,
+                    url: 'https://image.tmdb.org/t/p/w500' + elem.poster_path
+                });
+            });
+        }
+        res.render('pages/year', {
+            moviesByYear: moviesByYear,
+            year: req.params.year.trim()
+        });
+    });
+});
 
 
 

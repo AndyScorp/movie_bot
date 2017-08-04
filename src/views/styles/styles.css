@@ -1,0 +1,7 @@
+body > main > div > div > div.row > div:nth-child(1) {
+    margin-top: 15px;
+}
+
+body {
+    padding-top:50px;
+}
