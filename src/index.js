@@ -1,4 +1,4 @@
-
+var fs = require('fs');
 var libBot = require('./lib/bot');
 
 const bot = new libBot();
