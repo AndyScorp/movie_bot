@@ -319,7 +319,8 @@ app.get('/history', function(req, res) {
     list.get_db().then(function (resolve) {
         var lastTen = resolve.slice(resolve.length-11);
         res.render('pages/history', {
-            lastTen: lastTen
+            lastTen: lastTen,
+            url: urls.urls.heroku
         });
     });
 });

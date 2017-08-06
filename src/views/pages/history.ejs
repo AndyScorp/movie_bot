@@ -27,7 +27,8 @@
                 <h3>Last Ten requests!</h3>
                 <ul>
                     <% lastTen.forEach(function(movie) { %>
-                    <li><%= movie.id %> - <%= movie.data.title %></li>
+                    <a href="<%= url %><%= movie.data.id %>">
+                    <li><%= movie.id %> - <%= movie.data.title %></li></a>
                     <% }); %>
                 </ul>
             </div>
