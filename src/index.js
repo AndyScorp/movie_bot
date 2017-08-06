@@ -1,13 +1,15 @@
 var config = require('./config');
+var bodyParser = require('body-parser');
 var libBot = require('./lib/bot');
 var Bot = require('node-telegram-bot-api');
-var bot = new Bot(process.env.TELEGRAM_TOKEN || require('./token_telegram.json').token, {
-    // polling: true,
-    webHook: {
-        port: process.env.PORT
-    }
-});
-bot.setWebHook(config.telegram.externalUrl + ':443/bot' + config.telegram.token);
+var bot = new Bot(config.telegram.token);
+// var bot = new Bot(process.env.TELEGRAM_TOKEN || require('./token_telegram.json').token, {
+//     // polling: true,
+//     webHook: {
+//         port: process.env.PORT
+//     }
+// });
+bot.setWebHook(`${config.telegram.url}/bot${config.telegram.token}`);
 
 var movies = require('./services/getmovies');
 var movie = require('./services/getMovie');
@@ -21,6 +23,11 @@ var urls = require('./lib/url-for-dbbase');
 
 var express = require('express');
 var app = express();
+app.use(bodyParser.json());
+app.post(`/bot${config.telegram.token}`, function(req, res) {
+    bot.processUpdate(req.body);
+res.sendStatus(200);
+});
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
@@ -340,7 +347,7 @@ app.get('/year/:year', function(req, res) {
 
 
 
-var server = app.listen(process.env.PORT, function () {
+var server = app.listen(config.telegram.port, function () {
     var host = server.address().address;
     var port = server.address().port;
 
