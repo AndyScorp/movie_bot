@@ -1,3 +1,7 @@
+html, body {
+    font-family: 'Quicksand', sans-serif;
+}
+
 body > main > div > div > div.row > div:nth-child(1) {
     margin-top: 15px;
 }
@@ -5,3 +9,4 @@ body > main > div > div > div.row > div:nth-child(1) {
 body {
     padding-top:50px;
 }
+

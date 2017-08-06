@@ -1,15 +1,16 @@
 var config = require('./config');
 var bodyParser = require('body-parser');
+
 var libBot = require('./lib/bot');
+
 var Bot = require('node-telegram-bot-api');
+
+// Heroku Mode
 var bot = new Bot(config.telegram.token);
-// var bot = new Bot(process.env.TELEGRAM_TOKEN || require('./token_telegram.json').token, {
-//     // polling: true,
-//     webHook: {
-//         port: process.env.PORT
-//     }
-// });
 bot.setWebHook(`${config.telegram.url}/bot${config.telegram.token}`);
+
+// DEV Mode
+// var bot = new Bot(config.telegram.token, {polling: true});
 
 var movies = require('./services/getmovies');
 var movie = require('./services/getMovie');
@@ -23,11 +24,15 @@ var urls = require('./lib/url-for-dbbase');
 
 var express = require('express');
 var app = express();
+
+// Heroku Mode
 app.use(bodyParser.json());
 app.post(`/bot${config.telegram.token}`, function(req, res) {
     bot.processUpdate(req.body);
 res.sendStatus(200);
 });
+
+
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
@@ -208,13 +213,13 @@ bot.onText(/\/year/, function (msg) {
                     bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
                 } else {
                     resolve.forEach(function (elem) {
+                        console.log(elem);
                         bot.sendMessage(chat_id,
                             '*' + elem.original_title + '*' + '\n'
                             + elem.overview + '\n'
                             + '_' + elem.release_date + '_' + '\n'
                             + '\n' + elem.popularity + '\n\n'
-                            + 'https://www.themoviedb.org/movie/'+ elem.id + '\n'
-                            + 'https://movie-lite-bot.herokuapp.com/year/' + msg.text,
+                            + urls.urls.heroku + elem.id,
                             {parse_mode : "Markdown"}
                         );
                     });
@@ -246,7 +251,7 @@ bot.onText(/\/genre/, function (msg) {
                             + elem.overview + '\n'
                             + '_' + elem.release_date + '_' + '\n'
                             + '\n' + elem.popularity + '\n\n'
-                            + urls.urls.movieDB + elem.id,
+                            + urls.urls.heroku + elem.id,
                             {parse_mode : "Markdown"}
                         );
                     });
@@ -277,7 +282,7 @@ bot.onText(/\/filterGY/, function (msg) {
                             + elem.overview + '\n'
                             + '_' + elem.release_date + '_' + '\n'
                             + '\n' + elem.popularity + '\n\n'
-                            + urls.urls.movieDB + elem.id,
+                            + urls.urls.heroku + elem.id,
                             {parse_mode : "Markdown"}
                         );
                     });
@@ -345,12 +350,38 @@ app.get('/year/:year', function(req, res) {
     });
 });
 
+app.get('/movie/:id', function(req, res) {
+    var movie = [];
+    var get_movie_by_genre = require('./services/get-movie-by-genre');
+    var url = urls.urls.movieID;
+    var movie_list_by_genre = get_movie_by_genre.getSingleMovie(url, req.params.id.trim());
+    movie_list_by_genre.then(function (resolve) {
+
+        movie = resolve;
+        movie.posterUrl = 'https://image.tmdb.org/t/p/w500' + movie.poster_path;
+
+        res.render('pages/movie', {
+            movie: movie,
+            id: req.params.id.trim()
+        });
+    });
+});
 
 
+// Heroku Mode
 var server = app.listen(config.telegram.port, function () {
     var host = server.address().address;
     var port = server.address().port;
 
     console.log('Web server started at http://%s:%s', host, port);
 });
+
+
+// DEV Mode
+// var server = app.listen(function () {
+//     var host = server.address().address;
+//     var port = server.address().port;
+//
+//     console.log('Web server started at http://%s:%s', host, port);
+// });
 

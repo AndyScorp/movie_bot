@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+    <meta property="og:title" content="<%= movie.title %>">
+    <meta property="og:type" content="movie">
+    <meta property="og:url" content="https://movie-lite-bot.herokuapp.com/movie/<%= movie.title %>">
+    <meta property="og:image" content="<%= movie.posterUrl %>">
+    <meta property="og:site_name" content="The MovieLiteBot">
+</head>
+<body class="container">
+
+<header>
+    <% include ../partials/header %>
+</header>
+
+<main>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="media col-sm-12">
+                    <div class="media-left media-top">
+                        <a href="#">
+                            <img class="media-object" src="<%= movie.posterUrl %>" alt="img" width="300px">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h2 class="media-heading"><%= movie.title %></h2>
+                        <h4><%= movie.overview %></h4>
+                        <p>date: <%= movie.release_date %></p>
+                        <p>rating: <%= movie.popularity %></p>
+                        <p>budget: <%= movie.budget %></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+</body>
+</html>
+

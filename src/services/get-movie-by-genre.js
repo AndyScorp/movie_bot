@@ -4,6 +4,7 @@ var add_db = require('../models/database');
 
 module.exports.getMovieByGenre = function (url, replace) {
     return new Promise(function (resolve, reject) {
+        console.log(url, replace);
         ajax.sendGetRequest(url.replace('{name}', replace) + '&page='+getRandomPage(50), handler, true);
         function handler(request) {
             if (request) {
@@ -15,6 +16,20 @@ module.exports.getMovieByGenre = function (url, replace) {
                     add_db.create_db(JSON.stringify(entry))
                 }
                 return resolve(filmsArray);
+            } else {
+                return reject
+            }
+        }
+    });
+};
+
+module.exports.getSingleMovie = function (url, replace) {
+    return new Promise(function (resolve, reject) {
+        console.log(url, replace);
+        ajax.sendGetRequest(url.replace('{name}', replace) + '&page='+getRandomPage(50), handler, true);
+        function handler(request) {
+            if (request) {
+                return resolve(request);
             } else {
                 return reject
             }
