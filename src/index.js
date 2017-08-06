@@ -1,7 +1,13 @@
-
+var config = require('./config');
 var libBot = require('./lib/bot');
 var Bot = require('node-telegram-bot-api');
-var bot = new Bot(process.env.TELEGRAM_TOKEN || require('./token_telegram.json').token, {polling: true});
+var bot = new Bot(process.env.TELEGRAM_TOKEN || require('./token_telegram.json').token, {
+    // polling: true,
+    webHook: {
+        port: process.env.PORT
+    }
+});
+bot.setWebHook(config.telegram.externalUrl + ':443/bot' + config.telegram.token);
 
 var movies = require('./services/getmovies');
 var movie = require('./services/getMovie');
