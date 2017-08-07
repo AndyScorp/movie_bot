@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+    <meta property="og:title" content="<%= movie.title %>">
+    <meta property="og:type" content="movie">
+    <meta property="og:url" content="https://movie-lite-bot.herokuapp.com/movie/<%= movie.title %>">
+    <meta property="og:image" content="<%= movie.posterUrl %>">
+    <meta property="og:site_name" content="The MovieLiteBot">
+</head>
+<body class="container">
+
+<header>
+    <% include ../partials/header %>
+</header>
+
+<main>
+
+
+<div class="wraper">
+    <div class="poster item">
+        <% if (movie.poster_path || omdb.Poster !== 'N/A') { %>
+            <img class="media-object" src="<%= movie.posterUrl || omdb.Poster%>" alt="<%= omdb.Poster %>">
+        <% } %>
+    </div>
+    <div class="description item">
+
+        <!-- Title -->
+        <h1><%= movie.title %></h1>
+
+        <!-- Original Title -->
+        <p class="original"><%= movie.title %></p>
+
+        <!-- Overview -->
+        <p class="info">Overview: <span><%= movie.overview %></span></p>
+
+        <!-- Countrey -->
+        <div class="element">
+            <p class="country">Country:</p>
+            <div class="element--item"><%= omdb.Country %></div>
+        </div>
+
+        <!-- Language -->
+        <div class="element">
+            <p>Runtime:</p>
+            <div class="element--item"><%= omdb.Runtime %></div>
+        </div>
+
+        <!-- Release Date -->
+        <div class="element">
+            <p>Release Date:</p>
+            <div class="element--item"><%= movie.release_date %></div>
+        </div>
+        <!-- Director -->
+        <div class="element">
+            <p>Director:</p>
+            <div class="element--item"><%= omdb.Director %></div>
+        </div>
+        <!-- Genre -->
+        <div class="element">
+            <p>Genre:</p>
+            <div class="element--item"><%= omdb.Genre %></div>
+        </div>
+        <!-- Writer -->
+        <div class="element">
+            <p>Rating:</p>
+            <div class="element--item"><%= omdb.imdbRating %></div>
+        </div>
+        <!-- Stars -->
+        <div class="element">
+            <p>Stars:</p>
+            <div class="element--item"><%= omdb.Actors %></div>
+        </div>
+        <!-- Awards -->
+        <div class="element">
+            <p>Awards:</p>
+            <div class="element--item"><%= omdb.Awards %></div>
+        </div>
+        <!-- Budget -->
+        <div class="element">
+            <p>Budget:</p>
+            <div class="element--item"><%= omdb.BoxOffice %></div>
+        </div>
+
+
+
+    </div>
+</div>
+<div class="wraper">
+
+</div>
+</main>
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+</body>
+</html>

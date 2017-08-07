@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,34 +15,75 @@
 </header>
 
 <main>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="row">
-                <div class="media col-sm-12">
-                    <div class="media-left media-top">
-                        <% if (movie.poster_path || omdb.Poster !== 'N/A') { %>
-                        <a href="#">
-                            <img class="media-object" src="<%= movie.posterUrl || omdb.Poster%>" alt="<%= omdb.Poster %>" width="400px">
-                        </a>
-                        <% } %>
-                    </div>
 
-                    <div class="media-body">
-                        <h2 class="media-heading"><%= movie.title %></h2>
-                        <h4><%= movie.overview %></h4>
-                        <p>genre: <%= omdb.Genre %></p>
-                        <p>date: <%= movie.release_date %></p>
-                        <p>rating IMDB: <%= omdb.imdbRating %></p>
-                        <p>runtime: <%= omdb.Runtime %></p>
-                        <p>director: <%= omdb.Director %></p>
-                        <p>country: <%= omdb.Country %></p>
-                        <p>actors: <%= omdb.Actors %></p>
-                        <p>awards: <%= omdb.Awards %></p>
-                        <p>budget: <%= omdb.BoxOffice %></p>
-                    </div>
-                </div>
 
+    <div class="wraper">
+        <div class="poster item">
+            <% if (movie.poster_path || omdb.Poster !== 'N/A') { %>
+            <img class="media-object" src="<%= movie.posterUrl || omdb.Poster%>" alt="<%= omdb.Poster %>">
+            <% } %>
+        </div>
+        <div class="description item">
+
+            <!-- Title -->
+            <h1><%= movie.title %></h1>
+
+            <!-- Original Title -->
+            <p class="original"><%= movie.title %></p>
+
+            <!-- Overview -->
+            <p class="info">Overview: <span><%= movie.overview %></span></p>
+
+            <!-- Countrey -->
+            <div class="element">
+                <p class="country">Country:</p>
+                <div class="element--item"><%= omdb.Country %></div>
             </div>
+
+            <!-- Language -->
+            <div class="element">
+                <p>Runtime:</p>
+                <div class="element--item"><%= omdb.Runtime %></div>
+            </div>
+
+            <!-- Release Date -->
+            <div class="element">
+                <p>Release Date:</p>
+                <div class="element--item"><%= movie.release_date %></div>
+            </div>
+            <!-- Director -->
+            <div class="element">
+                <p>Director:</p>
+                <div class="element--item"><%= omdb.Director %></div>
+            </div>
+            <!-- Genre -->
+            <div class="element">
+                <p>Genre:</p>
+                <div class="element--item"><%= omdb.Genre %></div>
+            </div>
+            <!-- Writer -->
+            <div class="element">
+                <p>Rating:</p>
+                <div class="element--item"><%= omdb.imdbRating %></div>
+            </div>
+            <!-- Stars -->
+            <div class="element">
+                <p>Stars:</p>
+                <div class="element--item"><%= omdb.Actors %></div>
+            </div>
+            <!-- Awards -->
+            <div class="element">
+                <p>Awards:</p>
+                <div class="element--item"><%= omdb.Awards %></div>
+            </div>
+            <!-- Budget -->
+            <div class="element">
+                <p>Budget:</p>
+                <div class="element--item"><%= omdb.BoxOffice %></div>
+            </div>
+
+
+
         </div>
     </div>
 </main>
