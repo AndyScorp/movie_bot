@@ -78,12 +78,12 @@ bot.on('message', function (msg) {
                                         mov.pathImage, {
                                             caption : mov.title + '\n' + mov.type + '\n' + mov.duration,
                                             "reply_markup": {
-                                                "inline_keyboard": [[{text:'Описание', callback_data: 'Description'}]]
+                                                "inline_keyboard": [[{text:'Описание', callback_data: '/Description'}]]
                                             }
                                         }
                                     ).then(function () {
                                         bot.once('callback_query', function (msg) {
-                                            if (msg.data==='Description') {
+                                            if (msg.data==='/Description') {
                                                 bot.sendMessage(msg.from.id,
                                                     '*' + mov.title + '*' + '\n'
                                                     + mov.type + '\n'
@@ -132,12 +132,12 @@ bot.on('message', function (msg) {
                                         mov.pathImage, {
                                             caption : mov.title + '\n' + mov.type + '\n' + mov.duration,
                                             "reply_markup": {
-                                                "inline_keyboard": [[{text:'Описание', callback_data: 'Description'}]]
+                                                "inline_keyboard": [[{text:'Описание', callback_data: '/Description'}]]
                                             }
                                         }
                                     ).then(function () {
                                         bot.once('callback_query', function (msg) {
-                                            if (msg.data==='Description') {
+                                            if (msg.data==='/Description') {
                                                 bot.sendMessage(msg.from.id,
                                                     '*' + mov.title + '*' + '\n'
                                                     + mov.type + '\n'
@@ -161,16 +161,16 @@ bot.on('message', function (msg) {
     else if (msg.text.toLowerCase().includes('звонок в кинотеатр')) {
         bot.sendMessage(msg.chat.id, "Позвоните в кинотеатр", {
             "reply_markup": {
-                "inline_keyboard": [[{text:'Звонок в Любаву', callback_data: 'lubava'}, {text:'Звонок в Плазу', callback_data: 'plaza'}]]
+                "inline_keyboard": [[{text:'Звонок в Любаву', callback_data: '/lubava'}, {text:'Звонок в Плазу', callback_data: '/plaza'}]]
             }
         }).then(function () {
             bot.once('callback_query', function(msg) {
-                if (msg.data==='lubava') {
+                if (msg.data==='/lubava') {
                     bot.sendContact(
                         msg.from.id,
                         '+380472599899',
                         "Lubava")
-                } else if ((msg.data==='plaza')) {
+                } else if ((msg.data==='/plaza')) {
                     bot.sendContact(
                         msg.from.id,
                         '+380472724313',
@@ -185,7 +185,7 @@ bot.onText(/\/start/, function(msg) {
     bot.sendMessage(msg.chat.id, "*Welcome to MovieLiteBot created by rrLero*\nBot lists schedule of movies in Cherkassy's cinemas", {
         parse_mode: "Markdown",
         "reply_markup": {
-            "keyboard": [["Любава", "Днепро-Плаза"], ["Звонок в кинотеатр"]]
+            "keyboard": [["/Любава", "/Днепро-Плаза"], ["Звонок в кинотеатр"]]
         }
     });
 });
@@ -333,6 +333,8 @@ bot.onText(/\/get_db/, function (msg) {
     });
 });
 
+
+
 app.get('/history', function(req, res) {
     var list = require('./models/database');
     list.get_db().then(function (resolve) {
@@ -409,4 +411,33 @@ var server = app.listen(config.telegram.port, function () {
 //
 //     console.log('Web server started at http://%s:%s', host, port);
 // });
+
+
+
+bot.onText(/(.+)/, function (msg, match) {
+
+    var apiai = require('apiai');
+
+    var apiAi = apiai(require('./token_telegram.json').apiai);
+
+    var request = apiAi.textRequest(msg.text, {
+        sessionId: '12345678'
+    });
+
+    request.on('response', function(response) {
+        if (response.result.action !== 'input.unknown') {
+
+            bot.sendMessage(msg.chat.id, response.result.fulfillment.speech)
+        }
+
+    });
+
+    request.on('error', function(error) {
+        console.log(error);
+    });
+
+    request.end();
+
+});
+
 
