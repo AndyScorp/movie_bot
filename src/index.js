@@ -418,7 +418,7 @@ bot.onText(/(.+)/, function (msg, match) {
 
     var apiai = require('apiai');
 
-    var apiAi = apiai(require(process.env.API_API_AI || './token_telegram.json').apiai);
+    var apiAi = apiai(process.env.API_API_AI || require('./token_telegram.json').apiai);
 
     var request = apiAi.textRequest(msg.text, {
         sessionId: '12345678'
