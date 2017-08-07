@@ -21,16 +21,25 @@
             <div class="row">
                 <div class="media col-sm-12">
                     <div class="media-left media-top">
+                        <% if (movie.poster_path || omdb.Poster !== 'N/A') { %>
                         <a href="#">
-                            <img class="media-object" src="<%= movie.posterUrl %>" alt="img" width="300px">
+                            <img class="media-object" src="<%= movie.posterUrl || omdb.Poster%>" alt="<%= omdb.Poster %>" width="400px">
                         </a>
+                        <% } %>
                     </div>
+
                     <div class="media-body">
                         <h2 class="media-heading"><%= movie.title %></h2>
                         <h4><%= movie.overview %></h4>
+                        <p>genre: <%= omdb.Genre %></p>
                         <p>date: <%= movie.release_date %></p>
-                        <p>rating: <%= movie.popularity %></p>
-                        <p>budget: <%= movie.budget %></p>
+                        <p>rating IMDB: <%= omdb.imdbRating %></p>
+                        <p>runtime: <%= omdb.Runtime %></p>
+                        <p>director: <%= omdb.Director %></p>
+                        <p>country: <%= omdb.Country %></p>
+                        <p>actors: <%= omdb.Actors %></p>
+                        <p>awards: <%= omdb.Awards %></p>
+                        <p>budget: <%= omdb.BoxOffice %></p>
                     </div>
                 </div>
 

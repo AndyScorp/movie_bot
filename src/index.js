@@ -195,7 +195,8 @@ bot.onText(/\/help/, function(msg) {
         + "/genre - 3 different movies filtered by Genre\n"
         + "/year - 3 movies from chosen year you wanted to watch\n"
         + "/filterGY - 3 movies by filter Genre + Year\n"
-        + "/get_db - list from db"
+        + "/get_db - list from db\n"
+        + "/find_by_title - Filter for example like this: star+wars+I"
     );
 });
 
@@ -213,7 +214,6 @@ bot.onText(/\/year/, function (msg) {
                     bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
                 } else {
                     resolve.forEach(function (elem) {
-                        console.log(elem);
                         bot.sendMessage(chat_id,
                             '*' + elem.original_title + '*' + '\n'
                             + elem.overview + '\n'
@@ -293,11 +293,30 @@ bot.onText(/\/filterGY/, function (msg) {
 });
 
 // Block for find movie by title !!!!!Need to do!!!!!!!Not Working!!!!!
-bot.onText(/\/find_by_title_imdb/, function (msg) {
-    bot.sendMessage(msg.chat.id, "input Genre of the movie you want to watch", {
-        "reply_markup": {
-            "inline_keyboard": [[{text:'Action', callback_data: 'Action'}], [{text:'Звонок в Плазу', callback_data: 'plaza'}]]
-        }
+bot.onText(/\/find_by_title/, function (msg) {
+    bot.sendMessage(msg.chat.id, "input KeyWords. Example: star+wars").then(function () {
+        bot.once('message', function (msg) {
+            var chat_id = msg.chat.id;
+            var get_movie_by_genre = require('./services/get-movie-by-genre');
+            var url = urls.urls.byKeyWords;
+            var movie_by_KW = get_movie_by_genre.getMovieByGenre(url, msg.text);
+            movie_by_KW.then(function (resolve) {
+                if (!resolve.length) {
+                    bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
+                } else {
+                    resolve.forEach(function (elem) {
+                        bot.sendMessage(chat_id,
+                            '*' + elem.original_title + '*' + '\n'
+                            + elem.overview + '\n'
+                            + '_' + elem.release_date + '_' + '\n'
+                            + '\n' + elem.popularity + '\n\n'
+                            + urls.urls.heroku + elem.id,
+                            {parse_mode : "Markdown"}
+                        );
+                    });
+                }
+            })
+        })
     })
 });
 
@@ -353,17 +372,22 @@ app.get('/year/:year', function(req, res) {
 
 app.get('/movie/:id', function(req, res) {
     var movie = [];
+    var omdb;
     var get_movie_by_genre = require('./services/get-movie-by-genre');
     var url = urls.urls.movieID;
-    var movie_list_by_genre = get_movie_by_genre.getSingleMovie(url, req.params.id.trim());
-    movie_list_by_genre.then(function (resolve) {
 
+    var movie_list_by_genre = get_movie_by_genre.getSingleMovie(url, req.params.id.trim());
+
+    movie_list_by_genre.then(function (resolve) {
         movie = resolve;
         movie.posterUrl = 'https://image.tmdb.org/t/p/w500' + movie.poster_path;
-
+        omdb = get_movie_by_genre.getMovieIMBD(urls.urls.getOmdb, resolve.imdb_id);
+        return omdb
+    }).then(function (omdb) {
         res.render('pages/movie', {
             movie: movie,
-            id: req.params.id.trim()
+            id: req.params.id.trim(),
+            omdb: omdb
         });
     });
 });

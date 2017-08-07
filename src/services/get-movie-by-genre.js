@@ -4,8 +4,13 @@ var add_db = require('../models/database');
 
 module.exports.getMovieByGenre = function (url, replace) {
     return new Promise(function (resolve, reject) {
-        console.log(url, replace);
-        ajax.sendGetRequest(url.replace('{name}', replace) + '&page='+getRandomPage(50), handler, true);
+        ajax.sendGetRequest(url.replace('{name}', replace), handlerPages, true);
+        function handlerPages(req) {
+            if (req) {
+                var page = getRandomPage(1, req.total_pages);
+                ajax.sendGetRequest(url.replace('{name}', replace) + '&page='+page, handler, true);
+            }
+        }
         function handler(request) {
             if (request) {
                 var filmsArray = [];
@@ -25,8 +30,20 @@ module.exports.getMovieByGenre = function (url, replace) {
 
 module.exports.getSingleMovie = function (url, replace) {
     return new Promise(function (resolve, reject) {
-        console.log(url, replace);
-        ajax.sendGetRequest(url.replace('{name}', replace) + '&page='+getRandomPage(50), handler, true);
+        ajax.sendGetRequest(url.replace('{name}', replace), handler, true);
+        function handler(request) {
+            if (request) {
+                return resolve(request);
+            } else {
+                return reject
+            }
+        }
+    });
+};
+
+module.exports.getMovieIMBD = function (url, replace) {
+    return new Promise(function (resolve, reject) {
+        ajax.sendGetRequest(url.replace('{name}', replace), handler, true);
         function handler(request) {
             if (request) {
                 return resolve(request);
@@ -44,10 +61,10 @@ function toArray(obj) {
 
 // Method to get one random Array item
 function getRandomEntry(array) {
-    return array[Math.round(Math.random() * (array.length - 1))];
+    return array[Math.floor(Math.random() * (array.length - 1))];
 }
 
 // Method to get one random number
-function getRandomPage(number) {
-    return Math.round(Math.random() * (number - 1))
+function getRandomPage(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min
 }
