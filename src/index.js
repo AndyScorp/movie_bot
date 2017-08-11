@@ -33,7 +33,6 @@ res.sendStatus(200);
 });
 
 
-
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/views/styles'));
@@ -42,7 +41,6 @@ app.use(express.static(__dirname + '/views/styles'));
 app.get('/', function (req, res) {
     res.render('pages/index');
 });
-
 
 
 bot.on('message', function (msg) {

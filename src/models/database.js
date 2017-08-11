@@ -28,14 +28,14 @@ module.exports.create_db = function (json) {
         if (err) {
             console.error('connection error', err.stack)
         } else {
-            client.query(createTableText, function (err,res) {
-                client.end();
-                pool.end();
-            });
-            // client.query("INSERT INTO movies(data) values($1)", [json], function (err,res) {
+            // client.query(createTableText, function (err,res) {
             //     client.end();
             //     pool.end();
             // });
+            client.query("INSERT INTO movies(data) values($1)", [json], function (err,res) {
+                client.end();
+                pool.end();
+            });
         }
 
     });
