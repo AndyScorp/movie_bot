@@ -8,85 +8,53 @@
     <meta property="og:image" content="<%= movie.posterUrl %>">
     <meta property="og:site_name" content="The MovieLiteBot">
 </head>
-<body class="container">
+<body>
 
 <header>
     <% include ../partials/header %>
 </header>
-
-<main>
-
-
-    <div class="wraper">
-        <div class="poster item">
-            <% if (movie.poster_path || omdb.Poster !== 'N/A') { %>
-            <img class="media-object" src="<%= movie.posterUrl || omdb.Poster%>" alt="<%= omdb.Poster %>">
-            <% } %>
+<div class="container">
+    <main>
+        <div class="row">
+            <div class="col-sm-5 col-md-4">
+                <% if (movie.poster_path || omdb.Poster !== 'N/A') { %>
+                <img class="img-responsive" src="<%= movie.posterUrl || omdb.Poster%>" alt="<%= omdb.Poster %>">
+                <% } %>
+            </div>
+            <div class="col-sm-7 col-md-8">
+                <h2><%= movie.title %>
+                    <span class="pull-right"><i class="fa fa-star" aria-hidden="true"></i> <%= omdb.imdbRating %></span>
+                </h2>
+                <p><i class="fa fa-calendar" aria-hidden="true"></i> <%= movie.release_date %></p>
+                <p>
+                    <b>Genre</b>: <%= omdb.Genre %>
+                </p>
+                <p>
+                    <b>Overview</b>: <%= movie.overview %>
+                </p>
+                <p>
+                    <b>Country</b>: <%= omdb.Country %>
+                </p>
+                <p>
+                    <b>Director:</b> <%= omdb.Director %>
+                </p>
+                <p>
+                    <b>Actors:</b> <%= omdb.Actors %>
+                </p>
+                <p>
+                    <b>Runtime:</b> <%= omdb.Runtime %>
+                </p>
+                <p>
+                    <b>Awards:</b> <%= omdb.Awards %>
+                </p>
+                <p>
+                    <b>Budget:</b> <%= omdb.BoxOffice %>
+                </p>
+            </div>
         </div>
-        <div class="description item">
+    </main>
+</div>
 
-            <!-- Title -->
-            <h1><%= movie.title %></h1>
-
-            <!-- Original Title -->
-            <p class="original"><%= movie.title %></p>
-
-            <!-- Overview -->
-            <p class="info">Overview: <span><%= movie.overview %></span></p>
-
-            <!-- Countrey -->
-            <div class="element">
-                <p class="country">Country:</p>
-                <div class="element--item"><%= omdb.Country %></div>
-            </div>
-
-            <!-- Language -->
-            <div class="element">
-                <p>Runtime:</p>
-                <div class="element--item"><%= omdb.Runtime %></div>
-            </div>
-
-            <!-- Release Date -->
-            <div class="element">
-                <p>Release Date:</p>
-                <div class="element--item"><%= movie.release_date %></div>
-            </div>
-            <!-- Director -->
-            <div class="element">
-                <p>Director:</p>
-                <div class="element--item"><%= omdb.Director %></div>
-            </div>
-            <!-- Genre -->
-            <div class="element">
-                <p>Genre:</p>
-                <div class="element--item"><%= omdb.Genre %></div>
-            </div>
-            <!-- Writer -->
-            <div class="element">
-                <p>Rating:</p>
-                <div class="element--item"><%= omdb.imdbRating %></div>
-            </div>
-            <!-- Stars -->
-            <div class="element">
-                <p>Stars:</p>
-                <div class="element--item"><%= omdb.Actors %></div>
-            </div>
-            <!-- Awards -->
-            <div class="element">
-                <p>Awards:</p>
-                <div class="element--item"><%= omdb.Awards %></div>
-            </div>
-            <!-- Budget -->
-            <div class="element">
-                <p>Budget:</p>
-                <div class="element--item"><%= omdb.BoxOffice %></div>
-            </div>
-
-
-
-        </div>
-    </div>
-</main>
 
 <footer>
     <% include ../partials/footer %>

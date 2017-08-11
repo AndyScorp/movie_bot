@@ -28,6 +28,28 @@ module.exports.getMovieByGenre = function (url, replace) {
     });
 };
 
+
+module.exports.getBestMovieByGenre = function (url, replace) {
+    return new Promise(function (resolve, reject) {
+        ajax.sendGetRequest(url.replace('{name}', replace) + '&page' + getRandomPage(1, 3), handler, true);
+        function handler(request) {
+            if (request) {
+                var filmsArray = [];
+                var results = request.results;
+                for (var i=0; i<3 && i<results.length; i++) {
+                    var entry = getRandomEntry(results);
+                    filmsArray.push(entry);
+                    add_db.create_db(JSON.stringify(entry))
+                }
+                return resolve(filmsArray);
+            } else {
+                return reject
+            }
+        }
+    });
+};
+
+
 module.exports.getSingleMovie = function (url, replace) {
     return new Promise(function (resolve, reject) {
         ajax.sendGetRequest(url.replace('{name}', replace), handler, true);

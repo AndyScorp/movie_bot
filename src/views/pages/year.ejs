@@ -4,39 +4,39 @@
 <head>
     <% include ../partials/head %>
 </head>
-<body class="container">
+<body>
 
 <header>
     <% include ../partials/header %>
 </header>
-
-<main>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="jumbotron">
-                <h1 class="text-center">3 Movies by Year: <%= year %></h1>
-            </div>
-
-            <div class="row">
-            <% moviesByYear.forEach(function(movie) { %>
-            <div class="media col-sm-6">
-                <div class="media-left media-top">
-                    <a href="#">
-                        <img class="media-object" src="<%= movie.url %>" alt="img" width="200px">
-                    </a>
+<div class="container">
+    <main>
+        <h1>Movies of 2017</h1>
+        <div class="row">
+            <div class="movies-wrap">
+                <% moviesByYear.forEach(function(movie) { %>
+                <div class="movie">
+                    <div class="movie-fon clearfix">
+                        <div class="col-sm-5 col-md-4 pl">
+                            <img class="img-responsive" src="<%= movie.url %>" >
+                        </div>
+                        <div class="col-sm-7 col-md-8 pr">
+                            <h2><%= movie.title %>
+                                <span class="pull-right"><i class="fa fa-star" aria-hidden="true"></i> <%= movie.popularity %></span>
+                            </h2>
+                            <p><i class="fa fa-calendar" aria-hidden="true"></i> <%= movie.release_date %></p>
+                            <p>
+                                <b>Overview</b>: <%= movie.overview %>
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div class="media-body">
-                    <h4 class="media-heading"><%= movie.title %></h4>
-                    <p><%= movie.overview %></p>
-                    <p><%= movie.release_date %></p>
-                    <p><%= movie.popularity %></p>
-                </div>
+                <% }); %>
+
             </div>
-            <% }); %>
         </div>
-        </div>
-    </div>
-</main>
+    </main>
+</div>
 
 <footer>
     <% include ../partials/footer %>

@@ -196,7 +196,9 @@ bot.onText(/\/help/, function(msg) {
         + "/year - 3 movies from chosen year you wanted to watch\n"
         + "/filterGY - 3 movies by filter Genre + Year\n"
         + "/get_db - list from db\n"
-        + "/find_by_title - Filter for example like this: star+wars+I"
+        + "/find_by_title - Filter for example like this: star+wars+I\n"
+        + "/best_year - 3 top-rated movies of some year\n"
+        + "/bestGY - 3 top-rated movies of some year by genre\n"
     );
 });
 
@@ -333,6 +335,118 @@ bot.onText(/\/get_db/, function (msg) {
     });
 });
 
+bot.onText(/\/best_year/, function (msg) {
+    bot.sendMessage(msg.chat.id, "Input Year which interesting for you (example: 2017)", {
+    }).then(function () {
+        bot.once('message', function (msg) {
+            var chat_id = msg.chat.id;
+            var get_movie_by_genre = require('./services/get-movie-by-genre');
+            var url = urls.urls.year + '&year={name}' + '&sort_by=popularity.desc';
+            var movie_list_by_genre = get_movie_by_genre.getBestMovieByGenre(url, msg.text);
+            movie_list_by_genre.then(function (resolve) {
+                if (!resolve.length) {
+                    bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
+                } else {
+                    resolve.forEach(function (elem) {
+                        bot.sendMessage(chat_id,
+                            '*' + elem.original_title + '*' + '\n'
+                            + elem.overview + '\n'
+                            + '_' + elem.release_date + '_' + '\n'
+                            + '\n' + elem.popularity + '\n\n'
+                            + urls.urls.heroku + elem.id,
+                            {parse_mode : "Markdown"}
+                        );
+                    });
+                }
+            });
+        })
+    })
+});
+
+bot.onText(/\/bestGY/, function (msg) {
+    bot.sendMessage(msg.chat.id, "input Genre and Year in such way: comedy+2017, result: 3 best movies", {
+    }).then(function () {
+        bot.once('message', function (msg) {
+            var array = msg.text.split('+');
+            var chat_id = msg.chat.id;
+            var get_movie_by_genre = require('./services/get-movie-by-genre');
+            var genre_id = require('./services/get_genre_id').getGenreId(array[0].toLowerCase());
+            var url = urls.urls.filterGY + '&year={name}&with_genres='+genre_id + '&sort_by=popularity.desc';
+            var movie_list_by_genre = get_movie_by_genre.getBestMovieByGenre(url, array[1]);
+            movie_list_by_genre.then(function (resolve) {
+                if (!resolve.length) {
+                    bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
+                } else {
+                    resolve.forEach(function (elem) {
+                        bot.sendMessage(chat_id,
+                            '*' + elem.original_title + '*' + '\n'
+                            + elem.overview + '\n'
+                            + '_' + elem.release_date + '_' + '\n'
+                            + '\n' + elem.popularity + '\n\n'
+                            + urls.urls.heroku + elem.id,
+                            {parse_mode : "Markdown"}
+                        );
+                    });
+                }
+            });
+        })
+    })
+});
+
+bot.onText(/\/setSeats/, function (msg, match) {
+    bot.sendMessage(msg.chat.id, "input Seats + rows + good + best", {})
+        .then(function () {
+           bot.once('message', function (msg) {
+               var array = msg.text.split('+');
+               var chat_id = msg.chat.id;
+               var create = require('./models/database').createTableSeats({
+                   "total_seats" : array[0],
+                   "rows" : array[1],
+                   "good" : array[2],
+                   "best" : array[3]
+               })
+           })
+        })
+});
+
+bot.onText(/\/getSeatsDB/, function (msg, match) {
+    var list = require('./models/database').getSeats();
+    console.log(msg);
+    list.then(function (resolve) {
+        var getFreeSeats = require('./services/get-free-seats').getFreeSeats(resolve, msg.from.id);
+        getFreeSeats.push([{
+            "text": "Cancel",
+            "callback_data": "cancel"
+        }]);
+        bot.sendMessage(msg.chat.id, 'Free Seats', {
+            "reply_markup": {
+                "inline_keyboard": getFreeSeats
+            }
+        })
+    });
+});
+
+bot.onText(/\/BookSeats/, function (msg, match) {
+    var list = require('./models/database').getSeats();
+    list.then(function (resolve) {
+        var getFreeSeats = require('./services/get-free-seats').getFreeSeats(resolve, msg.from.id);
+        getFreeSeats.push([{
+            "text": "Cancel",
+            "callback_data": "cancel"
+        }]);
+        bot.sendMessage(msg.chat.id, 'Free Seats. Pick one to book seat.', {
+            "reply_markup": {
+                "inline_keyboard": getFreeSeats
+            }
+        }).then(function () {
+            bot.once('callback_query', function (msg) {
+                require('./models/database').BookSeats(msg.data, msg.from.id).then(function (resolve) {
+                    bot.sendMessage(msg.from.id, resolve)
+                })
+            })
+        })
+    });
+});
 
 
 app.get('/history', function(req, res) {
@@ -341,7 +455,8 @@ app.get('/history', function(req, res) {
         var lastTen = resolve.slice(resolve.length-11);
         res.render('pages/history', {
             lastTen: lastTen,
-            url: urls.urls.heroku
+            url: urls.urls.heroku,
+            urlPoster: 'https://image.tmdb.org/t/p/w500'
         });
     });
 });
