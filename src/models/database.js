@@ -142,6 +142,8 @@ module.exports.BookSeats = function (idSeat, idUser) {
                 console.error('connection error', err.stack)
             } else {
                 if (idSeat === 'cancel') {
+                    client.end();
+                    pool.end();
                     return resolve('Canceled operation')
                 }
                 client.query("SELECT * FROM seats WHERE id="+idSeat+";", function (err,res) {
