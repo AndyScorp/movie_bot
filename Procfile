@@ -1,1 +1,1 @@
-worker: npm run build && npm run server
+web: node src/index.js
