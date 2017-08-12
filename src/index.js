@@ -1,9 +1,24 @@
 var config = require('./config');
-var Bot = require('node-telegram-bot-api');
 var bodyParser = require('body-parser');
+
+-var libBot = require('./lib/bot');
+
+var Bot = require('node-telegram-bot-api');
+
+// Heroku Mode
+var bot = new Bot(config.telegram.token);
+bot.setWebHook(`${config.telegram.url}/bot${config.telegram.token}`);
+
+// DEV Mode
+// var bot = new Bot(config.telegram.token, {polling: true});
+
 var movies = require('./services/getmovies');
 var movie = require('./services/getMovie');
 var ListMovieNames = require('./services/listMoviesNames');
+
+var lubavaUrl = 'http://cherkassy.multiplex.ua/Poster.aspx?id=16';
+var plazaUrl = 'http://cherkassy.multiplex.ua/Poster.aspx?id=10';
+
 var genres = require('./lib/genres-id.json');
 var urls = require('./lib/url-for-dbbase');
 
@@ -11,21 +26,17 @@ var express = require('express');
 var app = express();
 
 // Heroku Mode
-
-var bot = new Bot(config.telegram.token);
-bot.setWebHook(`${config.telegram.url}/bot${config.telegram.token}`);
-
 app.use(bodyParser.json());
 app.post(`/bot${config.telegram.token}`, function(req, res) {
     bot.processUpdate(req.body);
-res.sendStatus(200);
+    res.sendStatus(200);
 });
 
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/views/styles'));
-
+// app.set('port', (8080 || 443));
 
 // DEV Mode
 // var bot = new Bot(config.telegram.token, {polling: true});
