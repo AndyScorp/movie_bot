@@ -1,7 +1,7 @@
 var config = require('./config');
 var bodyParser = require('body-parser');
 
--var libBot = require('./lib/bot');
+var libBot = require('./lib/bot');
 
 var Bot = require('node-telegram-bot-api');
 
