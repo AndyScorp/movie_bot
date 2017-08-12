@@ -11,31 +11,31 @@ var express = require('express');
 var app = express();
 
 // Heroku Mode
-// var bodyParser = require('body-parser');
-// var bot = new Bot(config.telegram.token);
-// bot.setWebHook(`${config.telegram.url}/bot${config.telegram.token}`);
+var bodyParser = require('body-parser');
+var bot = new Bot(config.telegram.token);
+bot.setWebHook(`${config.telegram.url}/bot${config.telegram.token}`);
 
-// app.use(bodyParser.json());
-// app.post(`/bot${config.telegram.token}`, function(req, res) {
-//     bot.processUpdate(req.body);
-// res.sendStatus(200);
-// });
+app.use(bodyParser.json());
+app.post(`/bot${config.telegram.token}`, function(req, res) {
+    bot.processUpdate(req.body);
+res.sendStatus(200);
+});
 
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/views/styles'));
-// app.set('port', (8080 || 443));
+
 
 // DEV Mode
-var bot = new Bot(config.telegram.token, {polling: true});
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const configW = require('../webpack.config.js');
-const compiler = webpack(configW);
-app.use(webpackDevMiddleware(compiler, {
-    publicPath: configW.output.publicPath
-}));
+// var bot = new Bot(config.telegram.token, {polling: true});
+// const webpack = require('webpack');
+// const webpackDevMiddleware = require('webpack-dev-middleware');
+// const configW = require('../webpack.config.js');
+// const compiler = webpack(configW);
+// app.use(webpackDevMiddleware(compiler, {
+//     publicPath: configW.output.publicPath
+// }));
 
 
 
@@ -583,21 +583,21 @@ app.get('/movie/:id', function(req, res) {
 
 
 // Heroku Mode
-// var server = app.listen(config.telegram.port, function () {
-//     var host = server.address().address;
-//     var port = server.address().port;
-//
-//     console.log('Web server started at http://%s:%s', host, port);
-// });
-
-
-// DEV Mode
-var server = app.listen(function () {
+var server = app.listen(config.telegram.port, function () {
     var host = server.address().address;
     var port = server.address().port;
 
     console.log('Web server started at http://%s:%s', host, port);
 });
+
+
+// DEV Mode
+// var server = app.listen(function () {
+//     var host = server.address().address;
+//     var port = server.address().port;
+//
+//     console.log('Web server started at http://%s:%s', host, port);
+// });
 
 
 
