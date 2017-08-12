@@ -1,1 +1,1 @@
-npm run build && npm run start2
+worker: npm run build && npm run serve
