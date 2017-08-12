@@ -10,11 +10,18 @@
 </header>
 
 <div class="container">
+    <main>
+        <div class="my-box">
+            <div class="seats busy">Busy </div>
+            <div class="seats free">Free </div>
+            <div class="seats yours">Free </div>
+        </div>
     <div class="row">
         <div class="col-sm-12 col-md-6">
             <h2 class="text-center"><%= title %></h2>
             <% for(var i=1; i<rows+1; i++) {%>
-            <div class="my-box"> <span>Row # <%= i %> </span>
+            <div class="my-box">
+                <div class="seats rows"><%= i %> </div>
                 <% for(var j=0; j<cinema.length; j++) {%>
                     <% if (cinema[j].row === i) { %>
                         <% if (+cinema[j].user_id === +idUser) { %>
@@ -28,6 +35,7 @@
             <% } %>
         </div>
     </div>
+    </main>
 </div>
 
 <footer>

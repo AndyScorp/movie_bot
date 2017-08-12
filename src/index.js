@@ -1,7 +1,6 @@
 var config = require('./config');
 var bodyParser = require('body-parser');
 
-var libBot = require('./lib/bot');
 
 var Bot = require('node-telegram-bot-api');
 
@@ -37,7 +36,6 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/views/styles'));
 // app.set('port', (8080 || 443));
-
 
 
 

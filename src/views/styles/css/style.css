@@ -98,10 +98,18 @@ h2 span {
 .my-box div.seats {
 	flex: 0	1 auto;
 	align-self: auto;
-	min-width:40px;
-	min-height:40px;
+	min-width:50px;
+	min-height:50px;
 	border-style: groove;
+	text-align: center;
+	padding-top: 10px;
 }
+
+.my-box div.rows {
+	border-style: none;
+	padding-top: 13px;
+}
+
 
 .busy {
 	background: red;
