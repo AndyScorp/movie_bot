@@ -195,6 +195,13 @@ bot.onText(/\/help/, function(msg) {
         + "/find_by_title - Filter for example like this: star+wars+I\n"
         + "/best_year - 3 top-rated movies of some year\n"
         + "/bestGY - 3 top-rated movies of some year by genre\n"
+        + "/BookSeatsLubava - Book ticket in the cinema Lubava\n"
+        + "/BookSeatsPlaza - Book ticket in the cinema Plaza\n"
+    );
+});
+
+bot.onText(/\/admin/, function(msg) {
+    bot.sendMessage(msg.chat.id, "/setSeats - Put cinema to DB or replace old\n"
     );
 });
 
