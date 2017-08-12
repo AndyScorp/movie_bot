@@ -1,6 +1,6 @@
 var config = require('./config');
 var Bot = require('node-telegram-bot-api');
-
+var bodyParser = require('body-parser');
 var movies = require('./services/getmovies');
 var movie = require('./services/getMovie');
 var ListMovieNames = require('./services/listMoviesNames');
@@ -11,7 +11,7 @@ var express = require('express');
 var app = express();
 
 // Heroku Mode
-var bodyParser = require('body-parser');
+
 var bot = new Bot(config.telegram.token);
 bot.setWebHook(`${config.telegram.url}/bot${config.telegram.token}`);
 
