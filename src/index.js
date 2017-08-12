@@ -1,23 +1,9 @@
 var config = require('./config');
-var bodyParser = require('body-parser');
-
-
 var Bot = require('node-telegram-bot-api');
-
-// Heroku Mode
-var bot = new Bot(config.telegram.token);
-bot.setWebHook(`${config.telegram.url}/bot${config.telegram.token}`);
-
-// DEV Mode
-// var bot = new Bot(config.telegram.token, {polling: true});
 
 var movies = require('./services/getmovies');
 var movie = require('./services/getMovie');
 var ListMovieNames = require('./services/listMoviesNames');
-
-var lubavaUrl = 'http://cherkassy.multiplex.ua/Poster.aspx?id=16';
-var plazaUrl = 'http://cherkassy.multiplex.ua/Poster.aspx?id=10';
-
 var genres = require('./lib/genres-id.json');
 var urls = require('./lib/url-for-dbbase');
 
@@ -25,17 +11,31 @@ var express = require('express');
 var app = express();
 
 // Heroku Mode
-app.use(bodyParser.json());
-app.post(`/bot${config.telegram.token}`, function(req, res) {
-    bot.processUpdate(req.body);
-res.sendStatus(200);
-});
+// var bodyParser = require('body-parser');
+// var bot = new Bot(config.telegram.token);
+// bot.setWebHook(`${config.telegram.url}/bot${config.telegram.token}`);
+
+// app.use(bodyParser.json());
+// app.post(`/bot${config.telegram.token}`, function(req, res) {
+//     bot.processUpdate(req.body);
+// res.sendStatus(200);
+// });
 
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/views/styles'));
 // app.set('port', (8080 || 443));
+
+// DEV Mode
+var bot = new Bot(config.telegram.token, {polling: true});
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const configW = require('../webpack.config.js');
+const compiler = webpack(configW);
+app.use(webpackDevMiddleware(compiler, {
+    publicPath: configW.output.publicPath
+}));
 
 
 
@@ -44,7 +44,7 @@ bot.on('message', function (msg) {
     var linkString = [];
     const chatId = msg.chat.id;
     if (msg.text.toLowerCase().includes('любава')) {
-        movies.getMovies(lubavaUrl, '.afisha_td_bottom').then(function (resolve) {
+        movies.getMovies(urls.urls.lubavaUrl, '.afisha_td_bottom').then(function (resolve) {
             resolve.forEach(function (item, i, arr) {
                 movieString.push('<b>' + item[0] + '</b>' + '\n' + item[1]);
                 linkString.push({
@@ -99,7 +99,7 @@ bot.on('message', function (msg) {
         });
     }
     else if (msg.text.toLowerCase().includes('плаза')) {
-        movies.getMovies(plazaUrl, '.afisha_td_bottom').then(function (resolve) {
+        movies.getMovies(urls.urls.plazaUrl, '.afisha_td_bottom').then(function (resolve) {
             resolve.forEach(function (item, i, arr) {
                 movieString.push('<b>' + item[0] + '</b>' + '\n' + item[1]);
                 linkString.push({
@@ -583,21 +583,21 @@ app.get('/movie/:id', function(req, res) {
 
 
 // Heroku Mode
-var server = app.listen(config.telegram.port, function () {
-    var host = server.address().address;
-    var port = server.address().port;
-
-    console.log('Web server started at http://%s:%s', host, port);
-});
-
-
-// DEV Mode
-// var server = app.listen(function () {
+// var server = app.listen(config.telegram.port, function () {
 //     var host = server.address().address;
 //     var port = server.address().port;
 //
 //     console.log('Web server started at http://%s:%s', host, port);
 // });
+
+
+// DEV Mode
+var server = app.listen(function () {
+    var host = server.address().address;
+    var port = server.address().port;
+
+    console.log('Web server started at http://%s:%s', host, port);
+});
 
 
 
@@ -626,5 +626,3 @@ bot.onText(/(.+)/, function (msg, match) {
     request.end();
 
 });
-
-

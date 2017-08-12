@@ -1,1 +1,1 @@
-web: node src/index.js
+npm run build && npm run start2
