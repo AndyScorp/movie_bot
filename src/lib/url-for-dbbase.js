@@ -9,5 +9,6 @@ module.exports.urls = {
     movieID : 'https://api.themoviedb.org/3/movie/{name}' + apiKey,
     heroku: 'https://movie-lite-bot.herokuapp.com/movie/',
     byKeyWords: 'https://api.themoviedb.org/3/search/movie' + apiKey + '&query={name}',
-    getOmdb: 'http://www.omdbapi.com/?i={name}' + apiOmdb
+    getOmdb: 'http://www.omdbapi.com/?i={name}' + apiOmdb,
+    cinema: 'https://movie-lite-bot.herokuapp.com/cinema/'
 };

@@ -38,9 +38,7 @@ app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/views/styles'));
 // app.set('port', (8080 || 443));
 
-app.get('/', function (req, res) {
-    res.render('pages/index');
-});
+
 
 
 bot.on('message', function (msg) {
@@ -392,7 +390,7 @@ bot.onText(/\/bestGY/, function (msg) {
 });
 
 bot.onText(/\/setSeats/, function (msg, match) {
-    bot.sendMessage(msg.chat.id, "input Seats + rows + good + best", {})
+    bot.sendMessage(msg.chat.id, "input Seats + Rows + Good + Best + Cinema", {})
         .then(function () {
            bot.once('message', function (msg) {
                var array = msg.text.split('+');
@@ -401,14 +399,15 @@ bot.onText(/\/setSeats/, function (msg, match) {
                    "total_seats" : array[0],
                    "rows" : array[1],
                    "good" : array[2],
-                   "best" : array[3]
+                   "best" : array[3],
+                   "cinema": array[4]
                })
            })
         })
 });
 
 bot.onText(/\/getSeatsDB/, function (msg, match) {
-    var list = require('./models/database').getSeats();
+    var list = require('./models/database').getSeats('seats');
     console.log(msg);
     list.then(function (resolve) {
         var getFreeSeats = require('./services/get-free-seats').getFreeSeats(resolve, msg.from.id);
@@ -424,8 +423,8 @@ bot.onText(/\/getSeatsDB/, function (msg, match) {
     });
 });
 
-bot.onText(/\/BookSeats/, function (msg, match) {
-    var list = require('./models/database').getSeats();
+bot.onText(/\/BookSeatsLubava/, function (msg, match) {
+    var list = require('./models/database').getSeats('lubava');
     list.then(function (resolve) {
         var getFreeSeats = require('./services/get-free-seats').getFreeSeats(resolve, msg.from.id);
         getFreeSeats.push([{
@@ -438,11 +437,81 @@ bot.onText(/\/BookSeats/, function (msg, match) {
             }
         }).then(function () {
             bot.once('callback_query', function (msg) {
-                require('./models/database').BookSeats(msg.data, msg.from.id).then(function (resolve) {
-                    bot.sendMessage(msg.from.id, resolve)
+                require('./models/database').BookSeats(msg.data, msg.from.id, 'lubava').then(function (resolve) {
+                    bot.sendMessage(msg.from.id, resolve + '\n'
+                        + 'Here you can see fullfillment of cinema\n'
+                        + urls.urls.cinema + 'lubava/' + msg.from.id
+                    )
                 })
             })
         })
+    });
+});
+
+bot.onText(/\/BookSeatsPlaza/, function (msg, match) {
+    var list = require('./models/database').getSeats('plaza');
+    list.then(function (resolve) {
+        var getFreeSeats = require('./services/get-free-seats').getFreeSeats(resolve, msg.from.id);
+        getFreeSeats.push([{
+            "text": "Cancel",
+            "callback_data": "cancel"
+        }]);
+        bot.sendMessage(msg.chat.id, 'Free Seats. Pick one to book seat.', {
+            "reply_markup": {
+                "inline_keyboard": getFreeSeats
+            }
+        }).then(function () {
+            bot.once('callback_query', function (msg) {
+                require('./models/database').BookSeats(msg.data, msg.from.id, 'plaza').then(function (resolve) {
+                    bot.sendMessage(msg.from.id, resolve + '\n'
+                        + 'Here you can see fullfillment of cinema\n'
+                        + urls.urls.cinema + 'plaza/' + msg.from.id
+                    )
+                })
+            })
+        })
+    });
+});
+
+
+app.get('/', function (req, res) {
+    var rowsPlaza, rowsLubava;
+    require('./models/database').getSeats('lubava').then(function (lubava) {
+        return lubava;
+    }).then(function (lubava) {
+            require('./models/database').getSeats('plaza').then(function (plaza) {
+                rowsLubava = lubava[lubava.length-1].row;
+                rowsPlaza = plaza[plaza.length-1].row;
+                res.render('pages/index', {
+                    lubava: lubava,
+                    rowsLubava: +rowsLubava,
+                    obj: {
+                        false: 'busy',
+                        true: 'free'
+                    },
+                    plaza: plaza,
+                    rowsPlaza: +rowsPlaza
+                });
+        })
+    })
+});
+
+app.get('/cinema/:cinema/:id', function (req, res) {
+    var rows;
+    var cinema = req.params.cinema.trim();
+    var id = req.params.id.trim();
+    require('./models/database').getSeats(cinema).then(function (resolve) {
+        rows = resolve[resolve.length - 1].row;
+        res.render('pages/cinema', {
+            title: cinema,
+            cinema: resolve,
+            rows: +rows,
+            obj: {
+                false: 'busy',
+                true: 'free'
+            },
+            idUser: id
+        });
     });
 });
 

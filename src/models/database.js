@@ -60,10 +60,11 @@ module.exports.get_db = function () {
     });
 };
 
-var dropTableSeatsText = 'DROP TABLE IF EXISTS seats;';
-var createTableSeatsText = 'CREATE TABLE IF NOT EXISTS seats (id SERIAL PRIMARY KEY, row integer, quality text, status boolean, user_id integer );';
 
 module.exports.createTableSeats = function (obj) {
+    var dropTableSeatsText = 'DROP TABLE IF EXISTS ' + obj.cinema + ';';
+    var createTableSeatsText = 'CREATE TABLE IF NOT EXISTS ' + obj.cinema + ' (id SERIAL PRIMARY KEY, row integer, quality text, status boolean, user_id integer );';
+
     var seatsPerRow = Math.floor(+obj.total_seats/+obj.rows);
     console.log(seatsPerRow);
     var pool = new pg.Pool({connectionString: connectionString});
@@ -94,10 +95,10 @@ module.exports.createTableSeats = function (obj) {
                 } else if (quality === 2 && !best) {
                     quality = 'good'
                 }
-                client.query("INSERT INTO seats(row, quality, status) values($1, $2, $3)", [row, quality, getRandomNumber(0,1)] , function (err,res) {
+                client.query("INSERT INTO " + obj.cinema +"(row, quality, status) values($1, $2, $3)", [row, quality, getRandomNumber(0,1)] , function (err,res) {
                 });
             }
-            client.query("SELECT * FROM seats ORDER BY id;", function (err,res) {
+            client.query("SELECT * FROM " + obj.cinema + " ORDER BY id;", function (err,res) {
                 client.end();
                 pool.end();
             });
@@ -105,7 +106,7 @@ module.exports.createTableSeats = function (obj) {
     });
 };
 
-module.exports.getSeats = function () {
+module.exports.getSeats = function (cinema) {
 
     return new Promise(function (resolve, reject) {
 
@@ -115,7 +116,7 @@ module.exports.getSeats = function () {
             if (err) {
                 console.error('connection error', err.stack)
             } else {
-                client.query("SELECT * FROM seats ORDER BY id;", function (err,res) {
+                client.query("SELECT * FROM " + cinema +" ORDER BY id;", function (err,res) {
                     client.end();
                     pool.end();
                     return resolve(res.rows)
@@ -131,7 +132,7 @@ function getRandomNumber(min , max) {
 }
 
 
-module.exports.BookSeats = function (idSeat, idUser) {
+module.exports.BookSeats = function (idSeat, idUser, cinema) {
 
     return new Promise(function (resolve, reject) {
 
@@ -146,15 +147,15 @@ module.exports.BookSeats = function (idSeat, idUser) {
                     pool.end();
                     return resolve('Canceled operation')
                 }
-                client.query("SELECT * FROM seats WHERE id="+idSeat+";", function (err,res) {
+                client.query("SELECT * FROM " + cinema + " WHERE id="+idSeat+";", function (err,res) {
                     if (res.rows[0].user_id === idUser) {
-                        client.query("UPDATE seats SET status=true, user_id=null WHERE id="+idSeat+";", function (err,res) {
+                        client.query("UPDATE " + cinema + " SET status=true, user_id=null WHERE id="+idSeat+";", function (err,res) {
                             client.end();
                             pool.end();
                             return resolve('Your seat by number: ' + idSeat + ' where unbooked')
                         });
                     } else {
-                        client.query("UPDATE seats SET status=false, user_id="+idUser+ "WHERE id="+idSeat+";", function (err,res) {
+                        client.query("UPDATE " + cinema + " SET status=false, user_id="+idUser+ "WHERE id="+idSeat+";", function (err,res) {
                             client.end();
                             pool.end();
                             return resolve('Your seat by number: ' + idSeat + ' where booked')

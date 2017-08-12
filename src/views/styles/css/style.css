@@ -87,6 +87,34 @@ h2 span {
 	padding-top: 50px;
 }
 
+.my-box {
+	display: flex;
+	flex-flow:  row nowrap;
+	justify-content: center;
+	align-content: center;
+	align-items: center;
+}
+
+.my-box div.seats {
+	flex: 0	1 auto;
+	align-self: auto;
+	min-width:40px;
+	min-height:40px;
+	border-style: groove;
+}
+
+.busy {
+	background: red;
+}
+
+.free {
+	background: yellow;
+}
+
+.yours {
+	background: blue;
+}
+
 @media screen and (min-width: 768px) {
 	h2 {
 		margin-top: 0;
@@ -102,3 +130,5 @@ h2 span {
 		flex-basis: 100%;
 	}
 }
+
+

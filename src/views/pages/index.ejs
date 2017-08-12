@@ -9,12 +9,34 @@
     <% include ../partials/header %>
 </header>
 
-
-    <div class="jumbotron">
-        <h1>Movie Lite Bot</h1>
-        <p>Welcome to front-end page</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <h2 class="text-center">Lubava</h2>
+                <% for(var i=1; i<rowsLubava+1; i++) {%>
+                <div class="my-box"> <span>Row # <%= i %> </span>
+                    <% for(var j=0; j<lubava.length; j++) {%>
+                    <% if (lubava[j].row === i) { %>
+                    <div class="seats <%= obj[lubava[j].status] %>"> <%= lubava[j].id %> </div>
+                    <% } %>
+                    <% } %>
+                </div>
+                <% } %>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <h2 class="text-center">Plaza</h2>
+                <% for(var i=1; i<rowsPlaza+1; i++) {%>
+                <div class="my-box"> Row #: <%= i %>
+                    <% for(var j=0; j<plaza.length; j++) {%>
+                    <% if (plaza[j].row === i) { %>
+                    <div class="seats <%= obj[plaza[j].status] %>"> <%= plaza[j].id %> </div>
+                    <% } %>
+                    <% } %>
+                </div>
+                <% } %>
+            </div>
+        </div>
     </div>
-
 
 <footer>
     <% include ../partials/footer %>
