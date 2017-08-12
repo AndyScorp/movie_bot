@@ -583,7 +583,7 @@ app.get('/movie/:id', function(req, res) {
 
 
 // Heroku Mode
-var server = app.listen(config.telegram.port, function () {
+app.listen(config.telegram.port, function () {
     var host = server.address().address;
     var port = server.address().port;
 
