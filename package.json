@@ -4,9 +4,9 @@
   "description": "movieBot",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js --exec babel-node",
-    "server": "node src/index.js",
-    "start2": "node dist/server.js",
+    "start": "node src/index.js",
+    "server": "node dist/server.js",
+    "start2": "node src/index.js --exec babel-node",
     "build": "rm -rf dist && webpack"
   },
   "author": "team10",
