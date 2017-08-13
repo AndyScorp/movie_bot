@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
-    entry: __dirname + "/src/index.js",
+    entry: "./src/index.js",
     target: "node",
     externals: [nodeExternals()],
     output: {
