@@ -435,7 +435,8 @@ bot.onText(/\/BookSeatsLubava/, function (msg, match) {
             "text": "Cancel",
             "callback_data": "cancel"
         }]);
-        bot.sendMessage(msg.chat.id, 'Free Seats. Pick one to book seat.', {
+        bot.sendMessage(msg.chat.id,
+            'Free Seats. Pick one to book seat.\n' + 'Here you can see fullfillment of cinema\n' + urls.urls.cinema + 'lubava/' + msg.chat.id, {
             "reply_markup": {
                 "inline_keyboard": getFreeSeats
             }
@@ -460,7 +461,8 @@ bot.onText(/\/BookSeatsPlaza/, function (msg, match) {
             "text": "Cancel",
             "callback_data": "cancel"
         }]);
-        bot.sendMessage(msg.chat.id, 'Free Seats. Pick one to book seat.', {
+        bot.sendMessage(msg.chat.id,
+            'Free Seats. Pick one to book seat.\n' + 'Here you can see fullfillment of cinema\n' + urls.urls.cinema + 'plaza/' + msg.chat.id, {
             "reply_markup": {
                 "inline_keyboard": getFreeSeats
             }
