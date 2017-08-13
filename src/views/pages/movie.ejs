@@ -17,8 +17,8 @@
     <main>
         <div class="row">
             <div class="col-sm-5 col-md-4">
-                <% if (movie.poster_path || omdb.Poster !== 'N/A') { %>
-                <img class="img-responsive" src="<%= movie.posterUrl || omdb.Poster%>" alt="<%= omdb.Poster %>">
+                <% if (movie.poster_path || omdb.Poster && omdb.Poster!=='N/A') { %>
+                <img class="img-responsive" src="<%= movie.posterUrl || omdb.Poster %>" alt="<%= omdb.Poster %>">
                 <% } else { %>
                 <img class="img-responsive" src="/img/no-poster.png">
                 <% } %>
