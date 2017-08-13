@@ -544,12 +544,17 @@ app.get('/year/:year', function(req, res) {
             moviesByYear = [];
         } else {
             resolve.forEach(function (elem) {
+                if (elem.poster_path) {
+                    var tempUrl = 'https://image.tmdb.org/t/p/w500' + elem.poster_path
+                } else {
+                    var tempUrl = '/img/no-poster.png'
+                }
                 moviesByYear.push({
                     title: elem.original_title,
                     overview: elem.overview,
                     release_date: elem.release_date,
                     popularity: elem.popularity,
-                    url: 'https://image.tmdb.org/t/p/w500' + elem.poster_path
+                    url: tempUrl
                 });
             });
         }

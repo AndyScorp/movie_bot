@@ -20,7 +20,12 @@
                 <div class="movie">
                     <div class="movie-fon clearfix">
                         <div class="col-sm-5 col-md-4 pl">
+
+                            <% if (!movie.data.poster_path) { %>
+                            <img class="img-responsive" src="/img/no-poster.png" >
+                            <% } else { %>
                             <img class="img-responsive" src="<%= urlPoster %><%= movie.data.poster_path %>" >
+                            <% } %>
                         </div>
                         <div class="col-sm-7 col-md-8 pr">
                             <a href="<%= url %><%= movie.data.id %>">
