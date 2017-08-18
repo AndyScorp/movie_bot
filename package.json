@@ -10,7 +10,7 @@
     "start": "node src/index.js",
     "server": "node dist/server.js",
     "start2": "node src/index.js --exec babel-node",
-    "build": "rm -rf dist && node_modules/.bin/webpack"
+    "build": "rm -rf dist && webpack"
   },
   "author": "team10",
   "license": "ISC",
