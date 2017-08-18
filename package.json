@@ -2,6 +2,9 @@
   "name": "chatbot",
   "version": "0.0.1",
   "description": "movieBot",
+  "engines": {
+    "node": "8.2.0"
+  },
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
