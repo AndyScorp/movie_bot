@@ -429,7 +429,7 @@ bot.onText(/(.+)/, function (msg, match) {
                 + "'Show me best comedies of 1999' or\n"
                 + "'What now in cinemas in cherkasy' or\n"
                 + "'Show me dramas, please' or\n"
-                + "'Sind movie by title Star Wars Episode I' or\n"
+                + "'Find movie by title Star Wars Episode I' or\n"
                 + "'I want to make call to ...' or\n"
                 + "'I want to order/book ticket to lubava' or\n"
                 + "'Try me with another options' or"
