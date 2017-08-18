@@ -10,8 +10,7 @@
     "start": "node src/index.js",
     "server": "node dist/server.js",
     "start2": "node src/index.js --exec babel-node",
-    "build": "rm -rf dist && webpack",
-    "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress"
+    "build": "rm -rf dist && node_modules/.bin/webpackwebpack"
   },
   "author": "team10",
   "license": "ISC",
