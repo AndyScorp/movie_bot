@@ -38,10 +38,153 @@ app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/views/styles'));
 
 
+
+// bot.onText(/\/start/, function(msg) {
+//     bot.sendMessage(msg.chat.id, "*Welcome to MovieLiteBot created by rrLero*\nBot lists schedule of movies in Cherkassy's cinemas", {
+//         parse_mode: "Markdown",
+//         "reply_markup": {
+//             "keyboard": [["/Любава", "/Днепро-Плаза"], ["Звонок в кинотеатр"]]
+//         }
+//     });
+// });
+
+bot.onText(/\/help/, function(msg) {
+    bot.sendMessage(msg.chat.id, "/just type something like:\n"
+        + "'I want films of 2017 or'\n"
+        + "'Show me best comedies of 1999 or'\n"
+        + "'What now in cinemas in cherkasy or'\n"
+        + "'Show me dramas, please'\n"
+        + "'Sind movie by title Star Wars Episode I'\n"
+        + "'I want to make call to ...'\n"
+        + "'I want to order/book ticket to lubava'\n"
+        + "'tTry me with another options'"
+    );
+});
+
 bot.onText(/\/admin/, function(msg) {
     bot.sendMessage(msg.chat.id, "/setSeats - Put cinema to DB or replace old\n"
     );
 });
+
+// Command to receive movie filtered by Year
+// bot.onText(/\/year/, function (msg) {
+//     bot.sendMessage(msg.chat.id, "Input Year which interesting for you (example: 2017)", {
+//     }).then(function () {
+//         bot.once('message', function (msg) {
+//             var chat_id = msg.chat.id;
+//             var get_movie_by_genre = require('./services/get-movie-by-genre');
+//             var url = urls.urls.year + '&year={name}';
+//             var movie_list_by_genre = get_movie_by_genre.getMovieByGenre(url, msg.text);
+//             movie_list_by_genre.then(function (resolve) {
+//                 if (!resolve.length) {
+//                     bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
+//                 } else {
+//                     resolve.forEach(function (elem) {
+//                         bot.sendMessage(chat_id,
+//                             '*' + elem.original_title + '*' + '\n'
+//                             + elem.overview + '\n'
+//                             + '_' + elem.release_date + '_' + '\n'
+//                             + '\n' + elem.popularity + '\n\n'
+//                             + urls.urls.heroku + elem.id,
+//                             {parse_mode : "Markdown"}
+//                         );
+//                     });
+//                 }
+//             });
+//         })
+//     })
+// });
+
+// Command to receive movie filtered by genre
+// bot.onText(/\/genre/, function (msg) {
+//     bot.sendMessage(msg.chat.id, "Input Genre of the movie you want to watch", {
+//         "reply_markup": {
+//             "inline_keyboard": ListMovieNames.listMovienames(3, genres.genres)
+//         }
+//     }).then(function () {
+//         bot.once('callback_query', function (msg) {
+//             var chat_id = msg.message.chat.id;
+//             var get_movie_by_genre = require('./services/get-movie-by-genre');
+//             var url = urls.urls.genre + '&with_genres={name}';
+//             var movie_list_by_genre = get_movie_by_genre.getMovieByGenre(url, msg.data);
+//             movie_list_by_genre.then(function (resolve) {
+//                 if (!resolve.length) {
+//                     bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
+//                 } else {
+//                     resolve.forEach(function (elem) {
+//                         bot.sendMessage(chat_id,
+//                             '*' + elem.original_title + '*' + '\n'
+//                             + elem.overview + '\n'
+//                             + '_' + elem.release_date + '_' + '\n'
+//                             + '\n' + elem.popularity + '\n\n'
+//                             + urls.urls.heroku + elem.id,
+//                             {parse_mode : "Markdown"}
+//                         );
+//                     });
+//                 }
+//             });
+//         })
+//     })
+// });
+
+// Command to receive movie filtered by year and genre
+// bot.onText(/\/filterGY/, function (msg) {
+//     bot.sendMessage(msg.chat.id, "input Genre and Year in such way: comedy+2017", {
+//     }).then(function () {
+//         bot.once('message', function (msg) {
+//             var array = msg.text.split('+');
+//             var chat_id = msg.chat.id;
+//             var get_movie_by_genre = require('./services/get-movie-by-genre');
+//             var genre_id = require('./services/get_genre_id').getGenreId(array[0].toLowerCase());
+//             var url = urls.urls.filterGY + '&year={name}&with_genres='+genre_id;
+//             var movie_list_by_genre = get_movie_by_genre.getMovieByGenre(url, array[1]);
+//             movie_list_by_genre.then(function (resolve) {
+//                 if (!resolve.length) {
+//                     bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
+//                 } else {
+//                     resolve.forEach(function (elem) {
+//                         bot.sendMessage(chat_id,
+//                             '*' + elem.original_title + '*' + '\n'
+//                             + elem.overview + '\n'
+//                             + '_' + elem.release_date + '_' + '\n'
+//                             + '\n' + elem.popularity + '\n\n'
+//                             + urls.urls.heroku + elem.id,
+//                             {parse_mode : "Markdown"}
+//                         );
+//                     });
+//                 }
+//             });
+//         })
+//     })
+// });
+
+// Block for find movie by title !!!!!Need to do!!!!!!!Not Working!!!!!
+// bot.onText(/\/find_by_title/, function (msg) {
+//     bot.sendMessage(msg.chat.id, "input KeyWords. Example: star+wars").then(function () {
+//         bot.once('message', function (msg) {
+//             var chat_id = msg.chat.id;
+//             var get_movie_by_genre = require('./services/get-movie-by-genre');
+//             var url = urls.urls.byKeyWords;
+//             var movie_by_KW = get_movie_by_genre.getMovieByGenre(url, msg.text);
+//             movie_by_KW.then(function (resolve) {
+//                 if (!resolve.length) {
+//                     bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
+//                 } else {
+//                     resolve.forEach(function (elem) {
+//                         bot.sendMessage(chat_id,
+//                             '*' + elem.original_title + '*' + '\n'
+//                             + elem.overview + '\n'
+//                             + '_' + elem.release_date + '_' + '\n'
+//                             + '\n' + elem.popularity + '\n\n'
+//                             + urls.urls.heroku + elem.id,
+//                             {parse_mode : "Markdown"}
+//                         );
+//                     });
+//                 }
+//             })
+//         })
+//     })
+// });
 
 // Command to receive last ten database records
 bot.onText(/\/get_db/, function (msg) {
@@ -56,21 +199,78 @@ bot.onText(/\/get_db/, function (msg) {
     });
 });
 
+// bot.onText(/\/best_year/, function (msg) {
+//     bot.sendMessage(msg.chat.id, "Input Year which interesting for you (example: 2017)", {
+//     }).then(function () {
+//         bot.once('message', function (msg) {
+//             var chat_id = msg.chat.id;
+//             var get_movie_by_genre = require('./services/get-movie-by-genre');
+//             var url = urls.urls.year + '&year={name}' + '&sort_by=popularity.desc';
+//             var movie_list_by_genre = get_movie_by_genre.getBestMovieByGenre(url, msg.text);
+//             movie_list_by_genre.then(function (resolve) {
+//                 if (!resolve.length) {
+//                     bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
+//                 } else {
+//                     resolve.forEach(function (elem) {
+//                         bot.sendMessage(chat_id,
+//                             '*' + elem.original_title + '*' + '\n'
+//                             + elem.overview + '\n'
+//                             + '_' + elem.release_date + '_' + '\n'
+//                             + '\n' + elem.popularity + '\n\n'
+//                             + urls.urls.heroku + elem.id,
+//                             {parse_mode : "Markdown"}
+//                         );
+//                     });
+//                 }
+//             });
+//         })
+//     })
+// });
+
+// bot.onText(/\/bestGY/, function (msg) {
+//     bot.sendMessage(msg.chat.id, "input Genre and Year in such way: comedy+2017, result: 3 best movies", {
+//     }).then(function () {
+//         bot.once('message', function (msg) {
+//             var array = msg.text.split('+');
+//             var chat_id = msg.chat.id;
+//             var get_movie_by_genre = require('./services/get-movie-by-genre');
+//             var genre_id = require('./services/get_genre_id').getGenreId(array[0].toLowerCase());
+//             var url = urls.urls.filterGY + '&year={name}&with_genres='+genre_id + '&sort_by=popularity.desc';
+//             var movie_list_by_genre = get_movie_by_genre.getBestMovieByGenre(url, array[1]);
+//             movie_list_by_genre.then(function (resolve) {
+//                 if (!resolve.length) {
+//                     bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
+//                 } else {
+//                     resolve.forEach(function (elem) {
+//                         bot.sendMessage(chat_id,
+//                             '*' + elem.original_title + '*' + '\n'
+//                             + elem.overview + '\n'
+//                             + '_' + elem.release_date + '_' + '\n'
+//                             + '\n' + elem.popularity + '\n\n'
+//                             + urls.urls.heroku + elem.id,
+//                             {parse_mode : "Markdown"}
+//                         );
+//                     });
+//                 }
+//             });
+//         })
+//     })
+// });
 
 bot.onText(/\/setSeats/, function (msg, match) {
     bot.sendMessage(msg.chat.id, "input Seats + Rows + Good + Best + Cinema", {})
         .then(function () {
-           bot.once('message', function (msg) {
-               var array = msg.text.split('+');
-               var chat_id = msg.chat.id;
-               var create = require('./models/database').createTableSeats({
-                   "total_seats" : array[0],
-                   "rows" : array[1],
-                   "good" : array[2],
-                   "best" : array[3],
-                   "cinema": array[4]
-               })
-           })
+            bot.once('message', function (msg) {
+                var array = msg.text.split('+');
+                var chat_id = msg.chat.id;
+                var create = require('./models/database').createTableSeats({
+                    "total_seats" : array[0],
+                    "rows" : array[1],
+                    "good" : array[2],
+                    "best" : array[3],
+                    "cinema": array[4]
+                })
+            })
         })
 });
 
@@ -91,6 +291,57 @@ bot.onText(/\/getSeatsDB/, function (msg, match) {
     });
 });
 
+// bot.onText(/\/BookSeatsLubava/, function (msg, match) {
+//     var list = require('./models/database').getSeats('lubava');
+//     list.then(function (resolve) {
+//         var getFreeSeats = require('./services/get-free-seats').getFreeSeats(resolve, msg.from.id);
+//         getFreeSeats.push([{
+//             "text": "Cancel",
+//             "callback_data": "cancel"
+//         }]);
+//         bot.sendMessage(msg.chat.id,
+//             'Free Seats. Pick one to book seat.\n' + 'Here you can see fullfillment of cinema\n' + urls.urls.cinema + 'lubava/' + msg.chat.id, {
+//             "reply_markup": {
+//                 "inline_keyboard": getFreeSeats
+//             }
+//         }).then(function () {
+//             bot.once('callback_query', function (msg) {
+//                 require('./models/database').BookSeats(msg.data, msg.from.id, 'lubava').then(function (resolve) {
+//                     bot.sendMessage(msg.from.id, resolve + '\n'
+//                         + 'Here you can see fullfillment of cinema\n'
+//                         + urls.urls.cinema + 'lubava/' + msg.from.id
+//                     )
+//                 })
+//             })
+//         })
+//     });
+// });
+
+// bot.onText(/\/BookSeatsPlaza/, function (msg, match) {
+//     var list = require('./models/database').getSeats('plaza');
+//     list.then(function (resolve) {
+//         var getFreeSeats = require('./services/get-free-seats').getFreeSeats(resolve, msg.from.id);
+//         getFreeSeats.push([{
+//             "text": "Cancel",
+//             "callback_data": "cancel"
+//         }]);
+//         bot.sendMessage(msg.chat.id,
+//             'Free Seats. Pick one to book seat.\n' + 'Here you can see fullfillment of cinema\n' + urls.urls.cinema + 'plaza/' + msg.chat.id, {
+//             "reply_markup": {
+//                 "inline_keyboard": getFreeSeats
+//             }
+//         }).then(function () {
+//             bot.once('callback_query', function (msg) {
+//                 require('./models/database').BookSeats(msg.data, msg.from.id, 'plaza').then(function (resolve) {
+//                     bot.sendMessage(msg.from.id, resolve + '\n'
+//                         + 'Here you can see fullfillment of cinema\n'
+//                         + urls.urls.cinema + 'plaza/' + msg.from.id
+//                     )
+//                 })
+//             })
+//         })
+//     });
+// });
 //********************** START OF FRONT END PART ***************************
 //**********************                         ***************************
 
@@ -99,19 +350,19 @@ app.get('/', function (req, res) {
     require('./models/database').getSeats('lubava').then(function (lubava) {
         return lubava;
     }).then(function (lubava) {
-            require('./models/database').getSeats('plaza').then(function (plaza) {
-                rowsLubava = lubava[lubava.length-1].row;
-                rowsPlaza = plaza[plaza.length-1].row;
-                res.render('pages/index', {
-                    lubava: lubava,
-                    rowsLubava: +rowsLubava,
-                    obj: {
-                        false: 'busy',
-                        true: 'free'
-                    },
-                    plaza: plaza,
-                    rowsPlaza: +rowsPlaza
-                });
+        require('./models/database').getSeats('plaza').then(function (plaza) {
+            rowsLubava = lubava[lubava.length-1].row;
+            rowsPlaza = plaza[plaza.length-1].row;
+            res.render('pages/index', {
+                lubava: lubava,
+                rowsLubava: +rowsLubava,
+                obj: {
+                    false: 'busy',
+                    true: 'free'
+                },
+                plaza: plaza,
+                rowsPlaza: +rowsPlaza
+            });
         })
     })
 });
@@ -134,6 +385,7 @@ app.get('/cinema/:cinema/:id', function (req, res) {
         });
     });
 });
+
 
 app.get('/history', function(req, res) {
     var list = require('./models/database');
@@ -199,13 +451,27 @@ app.get('/movie/:id', function(req, res) {
         });
     });
 });
+
 //**********************                       ***************************
 //********************** END OF FRONT END PART ***************************
 
+if (process.env.PORT) {
+    // Heroku Mode
+    var server = app.listen(config.telegram.port, function () {
+        var host = server.address().address;
+        var port = server.address().port;
+        console.log('Web server started at http://%s:%s', host, port);
+    });
+} else {
+    // DEV Mode
+    var server = app.listen(function () {
+        var host = server.address().address;
+        var port = server.address().port;
+        console.log('Web server started at http://%s:%s', host, port);
+    });
+}
 
 
-//**********************                       ***************************
-//********************** START OF BACK END PART ***************************
 bot.onText(/(.+)/, function (msg, match) {
 
     var apiai = require('apiai');
@@ -220,9 +486,7 @@ bot.onText(/(.+)/, function (msg, match) {
 
     request.on('response', function(response) {
 
-        if (response.result.fulfillment.speech) {
-            bot.sendMessage(msg.chat.id, response.result.fulfillment.speech);
-        }
+        bot.sendMessage(msg.chat.id, response.result.fulfillment.speech);
 
         if (response.result.action === 'show.cinema' && response.result.parameters.cinema) {
             var movieString = [];
@@ -423,17 +687,6 @@ bot.onText(/(.+)/, function (msg, match) {
                     });
                 }
             })
-        } else if (response.result.action === 'show.help' && response.result.parameters.help) {
-            bot.sendMessage(msg.chat.id, "Just type something like:\n"
-                + "'I want films of 2017' or\n"
-                + "'Show me best comedies of 1999' or\n"
-                + "'What now in cinemas in cherkasy' or\n"
-                + "'Show me dramas, please' or\n"
-                + "'Sind movie by title Star Wars Episode I' or\n"
-                + "'I want to make call to ...' or\n"
-                + "'I want to order/book ticket to lubava' or\n"
-                + "'Try me with another options' or"
-            );
         }
     });
 
@@ -442,25 +695,5 @@ bot.onText(/(.+)/, function (msg, match) {
     });
 
     request.end();
+
 });
-
-//**********************                       ***************************
-//********************** END OF BACK END PART ***************************
-
-
-if (process.env.PORT) {
-    // Heroku Mode
-    var server = app.listen(config.telegram.port, function () {
-        var host = server.address().address;
-        var port = server.address().port;
-        console.log('Web server started at http://%s:%s', host, port);
-    });
-} else {
-    // DEV Mode
-    var server = app.listen(function () {
-        var host = server.address().address;
-        var port = server.address().port;
-        console.log('Web server started at http://%s:%s', host, port);
-    });
-}
-
