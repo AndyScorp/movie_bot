@@ -94,7 +94,7 @@ bot.onText(/\/getSeatsDB/, function (msg, match) {
 //********************** START OF FRONT END PART ***************************
 //**********************                         ***************************
 
-app.get('/', function (req, res) {
+app.get('/order', function (req, res) {
     var rowsPlaza, rowsLubava;
     require('./models/database').getSeats('lubava').then(function (lubava) {
         return lubava;
@@ -147,6 +147,22 @@ app.get('/history', function(req, res) {
     });
 });
 
+app.get('/', function(req, res) {
+    var list = require('./models/database');
+    list.get_db().then(function (resolve) {
+        var lastTen = resolve.slice(resolve.length-11);
+        res.render('pages/main', {
+            lastTen: lastTen,
+            url: urls.urls.heroku,
+            urlPoster: 'https://image.tmdb.org/t/p/w500'
+        });
+    });
+});
+
+app.get('/help', function (req, res) {
+    res.render('pages/help');
+})
+
 app.get('/year/:year', function(req, res) {
     var moviesByYear = [];
     var get_movie_by_genre = require('./services/get-movie-by-genre');
@@ -167,13 +183,15 @@ app.get('/year/:year', function(req, res) {
                     overview: elem.overview,
                     release_date: elem.release_date,
                     popularity: elem.popularity,
-                    url: tempUrl
+                    url: tempUrl,
+                    id: elem.id
                 });
             });
         }
         res.render('pages/year', {
             moviesByYear: moviesByYear,
-            year: req.params.year.trim()
+            year: req.params.year.trim(),
+            url: urls.urls.heroku
         });
     });
 });
