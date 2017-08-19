@@ -3,7 +3,7 @@ body {
 	color: #000;
 }
 .main-wrap {
-	background-color: #f4f4f4; 
+	background-color: #f4f4f4;
 }
 main {
 	min-height: 83vh;
@@ -61,10 +61,33 @@ h2 span {
 	justify-content: flex-start;
 }
 .movie {
+	-webkit-flex-basis: 50%;
+	-ms-flex-preferred-size: 50%;
+	flex-basis: 50%;
+	margin-bottom: 30px;
+	padding: 0 15px;
+	-webkit-transition: z-index .5s, -webkit-transform 1s;
+	transition: z-index .5s, -webkit-transform 1s;
+	-o-transition: transform 1s, z-index .5s;
+	transition: transform 1s, z-index .5s;
+	transition: transform 1s, z-index .5s, -webkit-transform 1s;
+}
+
+.movie-slider {
+	-webkit-flex-basis: 50%;
+	-ms-flex-preferred-size: 50%;
 	flex-basis: 50%;
 	margin-bottom: 30px;
 	padding: 0 15px;
 }
+
+.movie:hover {
+	-webkit-transform: scale(1.1);
+	-ms-transform: scale(1.1);
+	transform: scale(1.1);
+	z-index: 4;
+}
+
 .movie-fon {
 	background-color: #fff;
 	padding-top: 10px;
@@ -76,6 +99,12 @@ h2 span {
 .pr {
 	padding-right: 10px;
 }
+
+/*.pr-slider {
+	display: none;
+}*/
+
+
 .navbar-fixed {
 	position: fixed;
 	top: 0;
@@ -123,6 +152,22 @@ h2 span {
 	background: blue;
 }
 
+.button {
+	margin: 10% 0;
+	text-align: center;
+}
+
+.description {
+	margin-bottom: 4%;
+}
+
+.description > h2, .description > h1 {
+	text-align: center;
+	font-style: italic;
+	font-weight: bold;
+}
+
+
 @media screen and (min-width: 768px) {
 	h2 {
 		margin-top: 0;
@@ -134,9 +179,16 @@ h2 span {
 	}
 }
 @media screen and (max-width: 991px) {
-	.movie {
+	.movie, .movie-slider {
 		flex-basis: 100%;
 	}
 }
 
-
+@media screen and (max-width: 766px) {
+	.pr-slider  p, .pr-slider  span {
+		display: none;
+	}
+	.pr-slider {
+		text-align: center;
+	}
+}
