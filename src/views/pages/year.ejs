@@ -11,7 +11,7 @@
 </header>
 <div class="container">
     <main>
-        <h1>Movies of 2017</h1>
+        <h1>Movies of <%= year %></h1>
         <div class="row">
             <div class="movies-wrap">
                 <% moviesByYear.forEach(function(movie) { %>
@@ -21,7 +21,7 @@
                             <img class="img-responsive" src="<%= movie.url %>" >
                         </div>
                         <div class="col-sm-7 col-md-8 pr">
-                            <h2><%= movie.title %>
+                            <h2><a href="<%= url %><%= movie.id %>"><%= movie.title %></a>
                                 <span class="pull-right"><i class="fa fa-star" aria-hidden="true"></i> <%= movie.popularity %></span>
                             </h2>
                             <p><i class="fa fa-calendar" aria-hidden="true"></i> <%= movie.release_date %></p>

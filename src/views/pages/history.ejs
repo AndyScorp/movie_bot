@@ -28,10 +28,9 @@
                             <% } %>
                         </div>
                         <div class="col-sm-7 col-md-8 pr">
-                            <a href="<%= url %><%= movie.data.id %>">
-                            <h2><%= movie.data.title %>
+                            <h2><a href="<%= url %><%= movie.data.id %>"><%= movie.data.title %></a>
                                 <span class="pull-right"><i class="fa fa-star" aria-hidden="true"></i> <%= movie.data.popularity %></span>
-                            </h2></a>
+                            </h2>
                             <p><i class="fa fa-calendar" aria-hidden="true"></i> <%= movie.data.release_date %></p>
 
                             <p>
