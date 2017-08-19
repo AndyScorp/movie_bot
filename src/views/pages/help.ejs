@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+    <meta property="og:title" content="help">
+    <meta property="og:type" content="movie">
+    <meta property="og:url" content="https://movie-lite-bot.herokuapp.com/help">
+    <meta property="og:site_name" content="The MovieLiteBot">
+</head>
+<body>
+
+<header>
+    <% include ../partials/header %>
+</header>
+<div class="container">
+<main>
+
+        <div class="col-sm-12">
+            <div class="description">
+                <h1>Movie BOT</h1>
+                <!--Movie bot is a telegramm bot-->
+                <h2>What bot can do:</h2>
+                <ul>
+                    <li>Bot can parse cinemas in Cherckasy</li>
+                    <li>For that you simply ask bot in free form to show you what movies are in cinemas now
+                        <h4>For example:</h4>
+                        <code>Please show movies in lubava</code>
+                    </li>
+                    <li>Bot can help you to make call to cinema
+                        <h4>For example:</h4>
+                        <code>I want to make call to lubava</code>
+                    </li>
+                    <li>
+                        Bot can show you list of movies filtered by some parameters
+                        <h4>For example:</h4>
+                        <code> Give me best movies of 2010</code> - bot will show you top three movies of IMDB of 2010 year
+                        <br>
+                        <code>Give me movies of 2010</code> - bot will show you three movies of IMDB of 2010 year <br>
+                        <code> Show me comedies of 2010</code> - bot will show you three comedies of IMDB of 2010 year <br>
+                        <code>Give me comedies</code> - bot will show you three comedies of IMDB <br>
+                        <code>Show me comedies of 2010</code> - bot will show you three comedies of IMDB of 2010 year
+                        <br>
+                        <code>Give me comedies</code> - bot will show you three comedies of IMDB
+                    </li>
+                    <li>
+                        Bot can help you to find movie by title
+                        <h4>For exampel:</h4>
+                        <code>Give movie with title Star Wars</code>
+                    </li>
+                    <li>Bot can order ticket to cinema
+                        <h4>For example:</h4>
+                        <code>I want to book ticket to lubava</code> <br>
+                        <code>I want to order ticket to plaza</code>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+</main>
+</div>
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+</body>
+</html>
