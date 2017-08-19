@@ -17,6 +17,12 @@ module.exports.getMovieByGenre = function (url, replace) {
                 var results = request.results;
                 for (var i=0; i<3 && i<results.length; i++) {
                     var entry = getRandomEntry(results);
+                    for (var j=0; j<i; j++) {
+                        if (entry.id === filmsArray[j].id) {
+                            entry = getRandomEntry(results);
+                            j=0;
+                        }
+                    }
                     filmsArray.push(entry);
                     add_db.create_db(JSON.stringify(entry))
                 }
@@ -38,6 +44,12 @@ module.exports.getBestMovieByGenre = function (url, replace) {
                 var results = request.results;
                 for (var i=0; i<3 && i<results.length; i++) {
                     var entry = getRandomEntry(results);
+                    for (var j=0; j<i; j++) {
+                        if (entry.id === filmsArray[j].id) {
+                            entry = getRandomEntry(results);
+                            j=0;
+                        }
+                    }
                     filmsArray.push(entry);
                     add_db.create_db(JSON.stringify(entry))
                 }
