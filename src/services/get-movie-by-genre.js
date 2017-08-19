@@ -15,7 +15,8 @@ module.exports.getMovieByGenre = function (url, replace) {
             if (request) {
                 var filmsArray = [];
                 var results = request.results;
-                for (var i=0; i<3 && i<results.length; i++) {
+                var len = results.length;
+                for (var i=0; i<3 && i<len; i++) {
                     var el = getRand(results.length);
                     var entry = results.splice(el,1)[0];
                     filmsArray.push(entry);
@@ -37,7 +38,8 @@ module.exports.getBestMovieByGenre = function (url, replace) {
             if (request) {
                 var filmsArray = [];
                 var results = request.results;
-                for (var i=0; i<3 && i<results.length; i++) {
+                var len = results.length;
+                for (var i=0; i<3 && i<len; i++) {
                     var el = getRand(results.length);
                     var entry = results.splice(el,1)[0];
                     filmsArray.push(entry);

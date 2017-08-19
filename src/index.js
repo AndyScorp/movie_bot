@@ -321,16 +321,18 @@ bot.onText(/(.+)/, function (msg, match) {
                     "callback_data": "cancel"
                 }]);
                 bot.sendMessage(msg.chat.id,
-                    'Free Seats. Pick one to book seat.\n' + 'Here you can see fullfillment of cinema\n' + urls.urls.cinema + cinemaName +'/' + msg.chat.id, {
+                    '*Free Seats*. Pick one to book seat.\n' + 'Here you can see fullfillment of cinema\n' + '[Link to cinema view](' + urls.urls.cinema + cinemaName + '/' + msg.chat.id + ')', {
+                        parse_mode : "Markdown",
                         "reply_markup": {
-                            "inline_keyboard": getFreeSeats
-                        }
+                                "inline_keyboard": getFreeSeats
+                            }
                     }).then(function () {
                     bot.once('callback_query', function (msg) {
                         require('./models/database').BookSeats(msg.data, msg.from.id, cinemaName).then(function (resolve) {
                             bot.sendMessage(msg.from.id, resolve + '\n'
                                 + 'Here you can see fullfillment of cinema\n'
-                                + urls.urls.cinema + cinemaName + '/' + msg.from.id
+                                + '[Link to cinema view](' + urls.urls.cinema + cinemaName + '/' + msg.from.id + ')',
+                                {parse_mode : "Markdown"}
                             )
                         })
                     })
@@ -443,14 +445,20 @@ bot.onText(/(.+)/, function (msg, match) {
             })
         } else if (response.result.action === 'show.help' && response.result.parameters.help) {
             bot.sendMessage(msg.chat.id, "Just type something like:\n"
-                + "'I want films of 2017' or\n"
-                + "'Show me best comedies of 1999' or\n"
-                + "'What now in cinemas in cherkasy' or\n"
-                + "'Show me dramas, please' or\n"
-                + "'Find movie by title Star Wars Episode I' or\n"
-                + "'I want to make call to ...' or\n"
-                + "'I want to order/book ticket to lubava' or\n"
-                + "'Try me with another options' or"
+                + "`I want films of 2017` or\n"
+                + "`Show me best comedies of 1999` or\n"
+                + "`What now in cinemas in cherkasy` or\n"
+                + "`Show me dramas, please` or\n"
+                + "`Find movie by title Star Wars Episode I` or\n"
+                + "`I want to make call to ...` or\n"
+                + "`I want to order/book ticket to lubava` or\n",
+                {parse_mode : "Markdown"}
+            );
+        } else if (response.result.action === 'show.start' && response.result.parameters.start) {
+            bot.sendMessage(msg.chat.id, "I am super smart " +"*Movie-Lite-Bot*" + " made by team 10\n"
+                + "in summer camp in *MOC*. You may try to speak with me. If you want to know more\n"
+                + "type `help` or `help me`",
+                {parse_mode : "Markdown"}
             );
         }
     });
