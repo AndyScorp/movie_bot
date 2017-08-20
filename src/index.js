@@ -228,7 +228,7 @@ bot.onText(/(.+)/, function (msg, match) {
 
     var apiai = require('apiai');
 
-    const chat_id = chatId = msg.chat.id;
+    var chat_id = chatId = msg.chat.id;
 
     var apiAi = apiai(process.env.API_API_AI || require('./token_telegram.json').apiai);
 
@@ -242,11 +242,30 @@ bot.onText(/(.+)/, function (msg, match) {
             bot.sendMessage(msg.chat.id, response.result.fulfillment.speech);
         }
 
-        if (response.result.action === 'show.cinema' && response.result.parameters.cinema) {
+        if (doAction[response.result.action]) {
+            doAction[response.result.action](response.result.parameters, chat_id, msg)
+        }
+
+    });
+
+    request.on('error', function(error) {
+        console.log(error);
+    });
+
+    request.end();
+});
+
+
+const doAction = {
+
+//*********************** Action API AI Show Cinema **********************
+
+    'show.cinema': function (parameters, chatId, msg) {
+        if (parameters.cinema) {
             var movieString = [];
             var linkString = [];
 
-            movies.getMovies(urls.urls[response.result.parameters.cinema + 'Url'], '.afisha_td_bottom').then(function (resolve) {
+            movies.getMovies(urls.urls[parameters.cinema + 'Url'], '.afisha_td_bottom').then(function (resolve) {
                 resolve.forEach(function (item, i, arr) {
                     movieString.push('<b>' + item[0] + '</b>' + '\n' + item[1]);
                     linkString.push({
@@ -299,20 +318,32 @@ bot.onText(/(.+)/, function (msg, match) {
                     })
                 });
             });
-        } else if (response.result.action === 'call.cinema' && response.result.parameters.cinema) {
-            if (response.result.parameters.cinema === 'lubava') {
+        }
+    },
+
+    //*********************** Action API AI Call Cinema **********************
+
+    'call.cinema': function (parameters, chatId, msg) {
+        if (parameters.cinema) {
+            if (parameters.cinema === 'lubava') {
                 bot.sendContact(
                     msg.from.id,
                     '+380472599899',
                     "Lubava")
-            } else if (response.result.parameters.cinema === 'plaza') {
+            } else if (parameters.cinema === 'plaza') {
                 bot.sendContact(
                     msg.from.id,
                     '+380472724313',
                     "Plaza")
             }
-        } else if (response.result.action === 'book.tickets' && response.result.parameters.seans) {
-            var cinemaName = response.result.parameters.seans;
+        }
+    },
+
+    //*********************** Action API AI Book Ticket **********************
+
+    'book.tickets': function (parameters, chatId, msg) {
+        if (parameters.seans) {
+            var cinemaName = parameters.seans;
             var list = require('./models/database').getSeats(cinemaName);
             list.then(function (resolve) {
                 var getFreeSeats = require('./services/get-free-seats').getFreeSeats(resolve, msg.from.id);
@@ -324,8 +355,8 @@ bot.onText(/(.+)/, function (msg, match) {
                     '*Free Seats*. Pick one to book seat.\n' + 'Here you can see fullfillment of cinema\n' + '[Link to cinema view](' + urls.urls.cinema + cinemaName + '/' + msg.chat.id + ')', {
                         parse_mode : "Markdown",
                         "reply_markup": {
-                                "inline_keyboard": getFreeSeats
-                            }
+                            "inline_keyboard": getFreeSeats
+                        }
                     }).then(function () {
                     bot.once('callback_query', function (msg) {
                         require('./models/database').BookSeats(msg.data, msg.from.id, cinemaName).then(function (resolve) {
@@ -338,10 +369,16 @@ bot.onText(/(.+)/, function (msg, match) {
                     })
                 })
             });
-        } else if (response.result.action === 'show.movies' && response.result.parameters.year && !response.result.parameters.genre) {
+        }
+    },
+
+    //*********************** Action API AI Show Movies **********************
+
+    'show.movies': function (parameters, chat_id, msg) {
+        if (parameters.year && !parameters.genre) {
             var get_movie_by_genre = require('./services/get-movie-by-genre');
             var url = urls.urls.year + '&year={name}';
-            var movie_list_by_genre = get_movie_by_genre.getMovieByGenre(url, response.result.parameters.year);
+            var movie_list_by_genre = get_movie_by_genre.getMovieByGenre(url, parameters.year);
             movie_list_by_genre.then(function (resolve) {
                 if (!resolve.length) {
                     bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
@@ -358,8 +395,8 @@ bot.onText(/(.+)/, function (msg, match) {
                     });
                 }
             });
-        } else if (response.result.action === 'show.movies' && response.result.parameters.year && response.result.parameters.genre) {
-            var array = [response.result.parameters.genre, response.result.parameters.year];
+        } else if (parameters.year && parameters.genre) {
+            var array = [parameters.genre, parameters.year];
             var get_movie_by_genre = require('./services/get-movie-by-genre');
             var genre_id = require('./services/get_genre_id').getGenreId(array[0].toLowerCase());
             var url = urls.urls.filterGY + '&year={name}&with_genres='+genre_id;
@@ -380,8 +417,14 @@ bot.onText(/(.+)/, function (msg, match) {
                     });
                 }
             });
-        } else if (response.result.action === 'best.movies' && response.result.parameters.year && response.result.parameters.genre) {
-            var array = [response.result.parameters.genre, response.result.parameters.year];
+        }
+    },
+
+    //*********************** Action API AI Best Movies **********************
+
+    'best.movies': function (parameters, chat_id, msg) {
+        if (parameters.year && parameters.genre) {
+            var array = [parameters.genre, parameters.year];
             var get_movie_by_genre = require('./services/get-movie-by-genre');
             var genre_id = require('./services/get_genre_id').getGenreId(array[0].toLowerCase());
             var url = urls.urls.filterGY + '&year={name}&with_genres='+genre_id + '&sort_by=popularity.desc';
@@ -402,10 +445,10 @@ bot.onText(/(.+)/, function (msg, match) {
                     });
                 }
             });
-        } else if (response.result.action === 'best.movies' && response.result.parameters.year && !response.result.parameters.genre) {
+        } else if (parameters.year && !parameters.genre) {
             var get_movie_by_genre = require('./services/get-movie-by-genre');
             var url = urls.urls.year + '&year={name}' + '&sort_by=popularity.desc';
-            var movie_list_by_genre = get_movie_by_genre.getBestMovieByGenre(url, response.result.parameters.year);
+            var movie_list_by_genre = get_movie_by_genre.getBestMovieByGenre(url, parameters.year);
             movie_list_by_genre.then(function (resolve) {
                 if (!resolve.length) {
                     bot.sendMessage(chat_id, 'Sorry Nothing Found by such request.\nTry another one');
@@ -422,10 +465,16 @@ bot.onText(/(.+)/, function (msg, match) {
                     });
                 }
             });
-        } else if (response.result.action === 'show.by_title' && response.result.parameters.Title) {
+        }
+    },
+
+    //*********************** Action API AI Show by Title **********************
+
+    'show.by_title': function (parameters, chat_id, msg) {
+        if (parameters.Title) {
             var get_movie_by_genre = require('./services/get-movie-by-genre');
             var url = urls.urls.byKeyWords;
-            var title = response.result.parameters.Title.replace(/ /g, "+");
+            var title = parameters.Title.replace(/ /g, "+");
             var movie_by_KW = get_movie_by_genre.getMovieByGenre(url, title);
             movie_by_KW.then(function (resolve) {
                 if (!resolve.length) {
@@ -443,7 +492,13 @@ bot.onText(/(.+)/, function (msg, match) {
                     });
                 }
             })
-        } else if (response.result.action === 'show.help' && response.result.parameters.help) {
+        }
+    },
+
+    //*********************** Action API AI Show Help **********************
+
+    'show.help': function (parameters, chat_id, msg) {
+        if (parameters.help) {
             bot.sendMessage(msg.chat.id, "Just type something like:\n"
                 + "`I want films of 2017` or\n"
                 + "`Show me best comedies of 1999` or\n"
@@ -454,21 +509,21 @@ bot.onText(/(.+)/, function (msg, match) {
                 + "`I want to order/book ticket to lubava` or\n",
                 {parse_mode : "Markdown"}
             );
-        } else if (response.result.action === 'show.start' && response.result.parameters.start) {
+        }
+    },
+
+    //*********************** Action API AI Show Start **********************
+
+    'show.start': function (parameters, chat_id, msg) {
+        if (parameters.start) {
             bot.sendMessage(msg.chat.id, "I am super smart " +"*Movie-Lite-Bot*" + " made by team 10\n"
                 + "in summer camp in *MOC*. You may try to speak with me. If you want to know more\n"
                 + "type `help` or `help me`",
                 {parse_mode : "Markdown"}
             );
         }
-    });
-
-    request.on('error', function(error) {
-        console.log(error);
-    });
-
-    request.end();
-});
+    }
+};
 
 //**********************                       ***************************
 //********************** END OF BACK END PART ***************************
