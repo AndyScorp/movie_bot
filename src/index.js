@@ -14,23 +14,21 @@ if (process.env.PORT) {
     // Heroku Mode
     var bot = new Bot(config.telegram.token);
     bot.setWebHook(`${config.telegram.url}/bot${config.telegram.token}`);
-    var bodyParser = require('body-parser');
-    app.use(bodyParser.json());
-    app.post(`/bot${config.telegram.token}`, function(req, res) {
-        bot.processUpdate(req.body);
-        res.sendStatus(200);
-    });
 } else {
     // DEV Mode
     var bot = new Bot(config.telegram.token, {polling: true});
-    const webpack = require('webpack');
-    const webpackDevMiddleware = require('webpack-dev-middleware');
-    const configW = require('../webpack.config.js');
-    const compiler = webpack(configW);
-    app.use(webpackDevMiddleware(compiler, {
-        publicPath: configW.output.publicPath
-    }));
 }
+
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const configW = require('../webpack.config.js');
+const compiler = webpack(configW);
+app.use(webpackDevMiddleware(compiler, {
+    publicPath: configW.output.publicPath
+}));
 
 
 app.set('view engine', 'ejs');
@@ -217,6 +215,12 @@ app.get('/movie/:id', function(req, res) {
         });
     });
 });
+
+app.post(`/bot${config.telegram.token}`, function(req, res) {
+    bot.processUpdate(req.body);
+    res.sendStatus(200);
+});
+
 //**********************                       ***************************
 //********************** END OF FRONT END PART ***************************
 
@@ -529,18 +533,26 @@ const doAction = {
 //********************** END OF BACK END PART ***************************
 
 
-if (process.env.PORT) {
-    // Heroku Mode
-    var server = app.listen(config.telegram.port, function () {
-        var host = server.address().address;
-        var port = server.address().port;
-        console.log('Web server started at http://%s:%s', host, port);
-    });
-} else {
-    // DEV Mode
-    var server = app.listen(function () {
-        var host = server.address().address;
-        var port = server.address().port;
-        console.log('Web server started at http://%s:%s', host, port);
-    });
-}
+var server = app.listen(process.env.PORT, function () {
+    var host = server.address().address;
+    var port = server.address().port;
+    console.log('Web server started at http://%s:%s', host, port);
+});
+
+
+
+// if (process.env.PORT) {
+//     // Heroku Mode
+//     var server = app.listen(config.telegram.port, function () {
+//         var host = server.address().address;
+//         var port = server.address().port;
+//         console.log('Web server started at http://%s:%s', host, port);
+//     });
+// } else {
+//     // DEV Mode
+//     var server = app.listen(function () {
+//         var host = server.address().address;
+//         var port = server.address().port;
+//         console.log('Web server started at http://%s:%s', host, port);
+//     });
+// }
