@@ -1,13 +1,16 @@
-var config = require('./config');
-var Bot = require('node-telegram-bot-api');
-var movies = require('./services/getmovies');
-var movie = require('./services/getMovie');
-var ListMovieNames = require('./services/listMoviesNames');
-var genres = require('./lib/genres-id.json');
-var urls = require('./lib/url-for-dbbase');
-
-var express = require('express');
-var app = express();
+const config = require('./config');
+const Bot = require('node-telegram-bot-api');
+const movies = require('./services/getmovies');
+const movie = require('./services/getMovie');
+const ListMovieNames = require('./services/listMoviesNames');
+const genres = require('./lib/genres-id.json');
+const urls = require('./lib/url-for-dbbase');
+const express = require('express');
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const configW = require('../webpack.config.js');
+const compiler = webpack(configW);
+const bodyParser = require('body-parser');
 
 
 if (process.env.PORT) {
@@ -19,18 +22,11 @@ if (process.env.PORT) {
     var bot = new Bot(config.telegram.token, {polling: true});
 }
 
-var bodyParser = require('body-parser');
+const app = express();
 app.use(bodyParser.json());
-
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const configW = require('../webpack.config.js');
-const compiler = webpack(configW);
 app.use(webpackDevMiddleware(compiler, {
     publicPath: configW.output.publicPath
 }));
-
-
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/views/styles'));
@@ -159,7 +155,7 @@ app.get('/', function(req, res) {
 
 app.get('/help', function (req, res) {
     res.render('pages/help');
-})
+});
 
 app.get('/year/:year', function(req, res) {
     var moviesByYear = [];
