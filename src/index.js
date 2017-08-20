@@ -11,7 +11,7 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const configW = require('../webpack.config.js');
 const compiler = webpack(configW);
 const bodyParser = require('body-parser');
-
+const app = express();
 
 if (process.env.PORT) {
     // Heroku Mode
@@ -20,13 +20,14 @@ if (process.env.PORT) {
 } else {
     // DEV Mode
     var bot = new Bot(config.telegram.token, {polling: true});
+    app.use(webpackDevMiddleware(compiler, {
+        publicPath: configW.output.publicPath
+    }));
 }
 
-const app = express();
+
 app.use(bodyParser.json());
-app.use(webpackDevMiddleware(compiler, {
-    publicPath: configW.output.publicPath
-}));
+
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/views/styles'));
