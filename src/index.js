@@ -508,7 +508,9 @@ const doAction = {
                 + "`Show me dramas, please` or\n"
                 + "`Find movie by title Star Wars Episode I` or\n"
                 + "`I want to make call to ...` or\n"
-                + "`I want to order/book ticket to lubava` or\n",
+                + "`I want to order/book ticket to lubava` or\n"
+                + "`Translate 'word/слово' - will translate from en/ru to ru/en\n"
+                + "`Price 'компресор муромец' - smart search in price AvtoHim",
                 {parse_mode : "Markdown"}
             );
         }
