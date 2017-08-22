@@ -1,9 +1,12 @@
 {
-  "token" : "",
-  "token-old" : "",
-  "apiDB" : "",
-  "DBPASSWORD" : "",
-  "omdbApi" : "",
-  "apiai" : "",
-  "postgre": ""
+  "token" : "445008338:AAEirGVYG_daw_onSFAhbyT6udSj24gln-A",
+  "token-old" : "409804897:AAHW-Fx6Ri8hkMrA9G_4cwd8wWM3mtAwa-c",
+  "apiDB" : "?api_key=15693fda909384f535d90fd7b33e3b4f",
+  "DBPASSWORD" : "postgresql://chat_bot:7M7T9nHH@localhost/chat_bot",
+  "omdbApi" : "&apikey=2f9efd11",
+  "apiai" : "af6177377256417d94351535cc870175",
+  "postgre": "postgres://gxrxqgwouwuafh:37a13f92bc2bf35534fac7a63c5eccf8c5520fd602a955664611ffe7ccf7d2ae@ec2-54-247-119-245.eu-west-1.compute.amazonaws.com:5432/d84f1d2j6dai5b",
+  "oneDrive": "4a1b2c52-bb47-4c8b-8c52-73ee8e83a022",
+  "Authorization": "bearer EwAIA61DBAAUGCCXc8wU/zFu9QnLdZXy+YnElFkAAWS7FfKifBHQD8phoy/ak+iJ1uduS4iIMm7xAb3sIyH3mUjoV5c5heaMMN1qN2DSNCtZQ0ACrEglvwpidlVcau3FZvpqY5SwzjVH4Vn8eQtInRCCgrhaNnC+ORpfkFfE5YGIORxIYxfHxkf8GxezacpCTsbetZuXcszr81xSiz07lhqmwmrGyQWSpiTDmo3ukrPY7EEQ3ltiCQOqT5XqK359FjTiVxMmNaAnhE/XtlIPljbbyP0Jv+bRhvqv1GPolGnYcrWafEUOjArH4LYo4TC8z275jnzpmC3V5rW4zhBCV/XwIcaMK1P7ZzwQofNeTi3rTPyNRdOAhjQm+duB+CUDZgAACBSV+2leiyXD2AEBkVv1xfb4IebOQQlNyKfwbnTtw1polHEOLpT/b7h6wz1EdIqIyx1IBqu1fXbDz9YmBGQqN1rLXFWOV+hIQUfvc7sQB5o5OsmW2TV+2AnAMmE13aw7XA3yQhHsERD5Wp/a1arMl9Luy1C1pp5Z+7KvkT8pJb4eUzWs3Y1gWoaFyNoIPERSqgJA7kqS5VuDL8zA0vAR5yx7WseDK7MPZvo5qp70uWO/HekQbhqAJiTDaY4ZPMNTDzqjiR+otSsyLDaMagmfBP1ZmXeWBRgM77za4Dgay4VPzTEoJtR0mb1Ut9yGN925D9Z4Z9H8WQRj+prGXb/BpjQOQn5pAQGlvsFXmAp1uDucfJAEkln/aFNebmSurtuFPE8PvEVFecupTZZTSr8C2gOfsf6ZqUEgZcE9MMp7fsFgisdt8tXiMgMzjbzcQnyeog2Q0pE7Q0Lt+3ZQBFkmbLle2Y1VNTdO2DKW985kEkXwSasZBsEZLM2PA0bu1Mt1dveyzGBZsAHyoghoQAqUuf79VqCLMMuxq0EEyOQh7Stm55d9R4e3ZAgGJPqQfR0DoBj5atBH3E+0aLa5zBCDm5M1YGdh4waiLP3YuWgQbNIb1moABjgmg8xtPj03rexMF4mQAgI=",
+  "DropBoxToken": "boCMfNQHjpAAAAAAAAAAIDq0y7TKw6RXmz5cimS3TRaj2IhZRn0OCLxENWxG4RUj"
 }

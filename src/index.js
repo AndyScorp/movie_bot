@@ -12,6 +12,7 @@ const configW = require('../webpack.config.js');
 const compiler = webpack(configW);
 const bodyParser = require('body-parser');
 const app = express();
+const translate = require('./services/translate');
 
 if (process.env.PORT) {
     // Heroku Mode
@@ -523,8 +524,48 @@ const doAction = {
                 {parse_mode : "Markdown"}
             );
         }
+    },
+    'action.translate': function (parameters, chat_id) {
+        if (parameters.any) {
+
+            let translation = translate.translate(parameters.any);
+            let alternative;
+
+            if (translation) {
+                translation.then(res => {
+                    let raw = JSON.parse(res.raw || '[]');
+                    if (Array.isArray(raw) && Array.isArray(raw[1]) && Array.isArray(raw[1][0]) && raw[1][0][1]) {
+                        alternative = raw[1][0][1].join(', ')
+                    } else { alternative = ''}
+                    bot.sendMessage(
+                        chat_id,
+                        '*Translation:* ' + res.text + '\n' + '*Alternative:* ' + alternative,
+                        {parse_mode : "Markdown"}
+                    );
+                }).catch(err => {
+                    console.error(err);
+                })
+            }
+        }
+    },
+    'action.price': function (parameters, chat_id) {
+        let str = '_Search result_\n';
+        require('./services/getPriceAvtohim').getPrice(parameters.any).then(function (resolve) {
+            for (let i=0; i<resolve.length && i<10; i++) {
+                str += '*1c-code:* ' + resolve[i][1] + ' *Description:* ' + resolve[i][2] + ' *Price:* ' + resolve[i][3] + ' грн.' + '\n'
+            }
+            bot.sendMessage(
+                chat_id,
+                str,
+                {parse_mode : "Markdown"}
+            );
+        });
     }
 };
+
+
+
+
 
 //**********************                       ***************************
 //********************** END OF BACK END PART ***************************
