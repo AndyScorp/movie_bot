@@ -11,6 +11,7 @@ module.exports.urls = {
     byKeyWords: 'https://api.themoviedb.org/3/search/movie' + apiKey + '&query={name}',
     getOmdb: 'http://www.omdbapi.com/?i={name}' + apiOmdb,
     cinema: 'https://movie-lite-bot.herokuapp.com/cinema/',
-    lubavaUrl: 'http://cherkassy.multiplex.ua/Poster.aspx?id=16',
-    plazaUrl: 'http://cherkassy.multiplex.ua/Poster.aspx?id=10'
+    lubavaUrl: 'http://kino.i.ua/cinema/209/',
+    plazaUrl: 'http://kino.i.ua/cinema/78/',
+    ukraineUrl: 'http://kino.i.ua/cinema/107/',
 };

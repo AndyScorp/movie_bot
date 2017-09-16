@@ -31,6 +31,8 @@
     "express-ws": "^3.0.0",
     "fs": "0.0.1-security",
     "google-translate-api": "^2.3.0",
+    "iconv": "^2.3.0",
+    "iconv-lite": "^0.4.19",
     "jsdom": "^11.1.0",
     "json-loader": "^0.5.4",
     "node-dom": "^0.1.0",
