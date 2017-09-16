@@ -278,7 +278,7 @@ const doAction = {
 
                 var newArray = ListMovieNames.listMovienames(2, linkString);
 
-                bot.sendMessage(chatId, '<b>' + msg.text.toUpperCase() + '</b>' + '\n\n' + movieString.join('\n\n'), {
+                bot.sendMessage(chatId, '<b>' + parameters.cinema.toUpperCase() + '</b>' + '\n\n' + movieString.join('\n\n'), {
                     parse_mode : "HTML",
                     "reply_markup": {
                         // "keyboard": newArray,
