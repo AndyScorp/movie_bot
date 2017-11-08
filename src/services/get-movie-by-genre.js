@@ -15,14 +15,16 @@ module.exports.getMovieByGenre = function (url, replace) {
             if (request) {
                 var filmsArray = [];
                 var results = request.results;
-                for (var i=0; i<3 && i<results.length; i++) {
-                    var entry = getRandomEntry(results);
+                var len = results.length;
+                for (var i=0; i<3 && i<len; i++) {
+                    var el = getRand(results.length);
+                    var entry = results.splice(el,1)[0];
                     filmsArray.push(entry);
                     add_db.create_db(JSON.stringify(entry))
                 }
                 return resolve(filmsArray);
             } else {
-                return reject
+                return reject;
             }
         }
     });
@@ -36,14 +38,16 @@ module.exports.getBestMovieByGenre = function (url, replace) {
             if (request) {
                 var filmsArray = [];
                 var results = request.results;
-                for (var i=0; i<3 && i<results.length; i++) {
-                    var entry = getRandomEntry(results);
+                var len = results.length;
+                for (var i=0; i<3 && i<len; i++) {
+                    var el = getRand(results.length);
+                    var entry = results.splice(el,1)[0];
                     filmsArray.push(entry);
                     add_db.create_db(JSON.stringify(entry))
                 }
                 return resolve(filmsArray);
             } else {
-                return reject
+                return reject;
             }
         }
     });
@@ -57,7 +61,7 @@ module.exports.getSingleMovie = function (url, replace) {
             if (request) {
                 return resolve(request);
             } else {
-                return reject
+                return reject;
             }
         }
     });
@@ -70,7 +74,7 @@ module.exports.getMovieIMBD = function (url, replace) {
             if (request) {
                 return resolve(request);
             } else {
-                return reject
+                return reject;
             }
         }
     });
@@ -78,7 +82,7 @@ module.exports.getMovieIMBD = function (url, replace) {
 
 // Method to call Object like array
 function toArray(obj) {
-    return [].slice.call(obj)
+    return [].slice.call(obj);
 }
 
 // Method to get one random Array item
@@ -88,5 +92,9 @@ function getRandomEntry(array) {
 
 // Method to get one random number
 function getRandomPage(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getRand(array) {
+   return Math.floor(Math.random() * (array - 1));
 }

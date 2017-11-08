@@ -1,7 +1,7 @@
 
 var connectionString = process.env.HEROKU_POSTGRESQL_BROWN_URL || require('../token_telegram.json').DBPASSWORD;
 pg = require('pg');
-var createTableText = 'CREATE TABLE IF NOT EXISTS test (id SERIAL PRIMARY KEY, data JSONB);';
+var createTableText = 'CREATE TABLE IF NOT EXISTS movies (id SERIAL PRIMARY KEY, data JSONB);';
 
 
 function createTable() {
@@ -28,10 +28,10 @@ module.exports.create_db = function (json) {
         if (err) {
             console.error('connection error', err.stack)
         } else {
-            // client.query(createTableText, function (err,res) {
-            //     client.end();
-            //     pool.end();
-            // });
+            client.query(createTableText, function (err,res) {
+                // client.end();
+                // pool.end();
+            });
             client.query("INSERT INTO movies(data) values($1)", [json], function (err,res) {
                 client.end();
                 pool.end();
@@ -50,6 +50,10 @@ module.exports.get_db = function () {
             if (err) {
                 console.error('connection error', err.stack)
             } else {
+                client.query(createTableText, function (err,res) {
+                    // client.end();
+                    // pool.end();
+                });
                 client.query("SELECT * FROM movies ORDER BY id;", function (err,res) {
                     client.end();
                     pool.end();
